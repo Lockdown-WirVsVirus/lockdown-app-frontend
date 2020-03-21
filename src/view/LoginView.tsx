@@ -11,20 +11,33 @@ interface LoginState {
   personalid: String;
   firstName: String;
   lastName: String;
+  disable: boolean;
 }
 
 export default class LoginView extends React.Component<LoginProps, LoginState> {
   constructor(pros: any) {
     super(pros);
-    this.state = { personalid: "", firstName: "", lastName: "" };
+    this.state = {
+      personalid: "",
+      firstName: "",
+      lastName: "",
+      disable: Boolean(1)
+    };
     this.sendLogin = this.sendLogin.bind(this);
   }
 
   sendLogin() {
-    console.log("test");
-    if (this.state.personalid.length === 10) {
-      console.log(SHA256(salt + this.state.personalid).toString());
-    }
+    console.log(SHA256(salt + this.state.personalid).toString());
+  }
+
+  validInput(firstname: String, lastname: String, personalid: String) {
+    let result = !(
+      firstname.length > 0 &&
+      lastname.length > 0 &&
+      personalid.length > 9 &&
+      personalid.length < 11
+    );
+    this.setState({ disable: result });
   }
 
   render() {
@@ -36,6 +49,11 @@ export default class LoginView extends React.Component<LoginProps, LoginState> {
           variant="filled"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             this.setState({ firstName: e.target.value });
+            this.validInput(
+              e.target.value,
+              this.state.lastName,
+              this.state.personalid
+            );
           }}
         />
         <br />
@@ -45,6 +63,11 @@ export default class LoginView extends React.Component<LoginProps, LoginState> {
           variant="filled"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             this.setState({ lastName: e.target.value });
+            this.validInput(
+              this.state.firstName,
+              e.target.value,
+              this.state.personalid
+            );
           }}
         />
         <br />
@@ -54,13 +77,15 @@ export default class LoginView extends React.Component<LoginProps, LoginState> {
           variant="filled"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             this.setState({ personalid: e.target.value });
+            this.validInput(
+              this.state.firstName,
+              this.state.lastName,
+              e.target.value
+            );
           }}
         />
         <br />
-        <Button
-          disabled={this.state.personalid.length < 10}
-          onClick={this.sendLogin}
-        >
+        <Button disabled={this.state.disable} onClick={this.sendLogin}>
           Anmelden
         </Button>
       </div>
