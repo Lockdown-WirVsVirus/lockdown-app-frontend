@@ -1,6 +1,9 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import SHA256 from "crypto-js/sha256";
+
+const salt = "234lsnfd";
 
 
 export default class Login extends React.Component{
@@ -13,20 +16,19 @@ export default class Login extends React.Component{
    
 
     sendLogin(){
-        console.log(this.personalid);
+        if (this.personalid.length === 10){
+            console.log(SHA256(salt + this.personalid).toString());
+        }
     }
     
     onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log("te")
-        console.log(e.target.value);
         this.personalid =  e.target.value;
     };
-
 
       
     render() {
         return (<div><TextField id="filled-basic" label="Personal-ID" variant="filled" onChange={this.onInputChange}/> 
-                 <Button variant="contained" color="primary" onClick={this.sendLogin}>Disable elevation</Button></div>);
+                 <Button variant="contained" onClick={this.sendLogin}>Anmelden</Button></div>);
     }
 
 }
