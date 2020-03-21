@@ -11,14 +11,13 @@ RUN yarn
 COPY . ./
 RUN yarn build
 
-# start app
-CMD ["npm", "start"]
 
-# -------------------
 
 # Stage 2 - the production environment
 FROM nginx:1.12-alpine
+ARG BACKEND_URL
 COPY --from=build-stage /app/build /usr/share/nginx/html
-COPY --from=build-stage /app/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-stage /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/docker-starter.sh docker/create_config.sh /
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["docker-starter.sh"]
