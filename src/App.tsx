@@ -16,7 +16,7 @@ function App() {
             <Route path="/check" component={CheckView}/>
             <Route path="/download" component={DownloadPdfView}/>
             <Route path="/open" component={ShowLsPdfView}/>
-            <Route path="/pdf" component={RenderLsPdfView}/>
+            <Route path="/render" component={RenderLsPdfView}/>
         </Router>
     );
 }
