@@ -32,8 +32,11 @@ const ShowLsPdfView = (props: CheckViewProperties) => {
     const openPdf = (filename: string) => {
         const dataUri: string = window.localStorage.getItem(filename) as string;
         if (dataUri) {
+            console.log('open pdf from LS dataUri=', dataUri);
             const blob = dataURItoBlob(dataUri);
-            window.open(URL.createObjectURL(blob));
+            const objectUrl = URL.createObjectURL(blob);
+            console.log('open pdf as ObjectURL', objectUrl);
+            window.open(objectUrl);
         }
 
     }
