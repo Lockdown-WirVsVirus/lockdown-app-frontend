@@ -1,6 +1,5 @@
 #!/bin/sh -eu
 
-./create_config.sh > /usr/share/nginx/html/config.js
-
+/create_config.sh
 
 nginx -g "daemon off;"
