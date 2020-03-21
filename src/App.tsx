@@ -5,6 +5,7 @@ import LoginView from "./view/LoginView";
 import CheckView from "./view/CheckView";
 import DownloadPdfView from "./view/DownloadPdfView";
 import ShowLsPdfView from "./view/ShowLsPdfView";
+import RenderLsPdfView from "./view/RenderLsPdfView";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
             <Route path="/check" component={CheckView}/>
             <Route path="/download" component={DownloadPdfView}/>
             <Route path="/open" component={ShowLsPdfView}/>
+            <Route path="/pdf" component={RenderLsPdfView}/>
         </Router>
     );
 }
