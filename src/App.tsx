@@ -1,16 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
+import Jentelman from './Jentelman.svg';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={Jentelman} className="App-logo" alt="logo" />
         <p>
-        <p>Hello from Lockdown App! 🎸 </p>
+        <p>Lockdown App! 🎸 </p>
         </p>
-        <p>Automated Deployment Pipeline 🚀</p>
+        <p>Automated Deployment Pipeline 🚀 <br/>
+           This from develop branch 👨🏼‍💻
+        </p>
       </header>
     </div>
   );
