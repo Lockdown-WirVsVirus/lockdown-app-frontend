@@ -5,43 +5,62 @@ import SHA256 from "crypto-js/sha256";
 
 const salt = "234lsnfd";
 
-export default class LoginView extends React.Component {
-  private personalid: String = "";
-  private firstName: String = "";
-  private lastName: String = "";
+interface LoginProps {}
 
+interface LoginState {
+  personalid: String;
+  firstName: String;
+  lastName: String;
+}
+
+export default class LoginView extends React.Component<LoginProps, LoginState> {
   constructor(pros: any) {
     super(pros);
+    this.state = { personalid: "", firstName: "", lastName: "" };
     this.sendLogin = this.sendLogin.bind(this);
   }
 
   sendLogin() {
-    if (this.personalid.length === 10) {
-      console.log(SHA256(salt + this.personalid).toString());
+    console.log("test");
+    if (this.state.personalid.length === 10) {
+      console.log(SHA256(salt + this.state.personalid).toString());
     }
   }
 
   render() {
     return (
       <div>
-        <TextField id="filled-basic" label="Vorname" variant="filled"   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            this.firstName = e.target.value;
-          }}/>
+        <TextField
+          id="filled-basic"
+          label="Vorname"
+          variant="filled"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            this.setState({ firstName: e.target.value });
+          }}
+        />
         <br />
-        <TextField id="filled-basic" label="Nachname" variant="filled"  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            this.lastName = e.target.value;
-          }} />
+        <TextField
+          id="filled-basic"
+          label="Nachname"
+          variant="filled"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            this.setState({ lastName: e.target.value });
+          }}
+        />
         <br />
         <TextField
           id="filled-basic"
           label="Personal-ID"
           variant="filled"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            this.personalid = e.target.value;
+            this.setState({ personalid: e.target.value });
           }}
         />
         <br />
-        <Button variant="contained" onClick={this.sendLogin}>
+        <Button
+          disabled={this.state.personalid.length < 10}
+          onClick={this.sendLogin}
+        >
           Anmelden
         </Button>
       </div>
