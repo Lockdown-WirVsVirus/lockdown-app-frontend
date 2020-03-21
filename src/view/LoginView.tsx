@@ -7,6 +7,8 @@ const salt = "234lsnfd";
 
 export default class LoginView extends React.Component {
   private personalid: String = "";
+  private firstName: String = "";
+  private lastName: String = "";
 
   constructor(pros: any) {
     super(pros);
@@ -19,31 +21,26 @@ export default class LoginView extends React.Component {
     }
   }
 
-  onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.personalid = e.target.value;
-  };
-
   render() {
     return (
       <div>
+        <TextField id="filled-basic" label="Vorname" variant="filled"   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            this.firstName = e.target.value;
+          }}/>
+        <br />
+        <TextField id="filled-basic" label="Nachname" variant="filled"  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            this.lastName = e.target.value;
+          }} />
+        <br />
         <TextField
           id="filled-basic"
           label="Personal-ID"
           variant="filled"
-          onChange={this.onInputChange}
-        /> <br/>
-        <TextField
-          id="filled-basic"
-          label="Vorname"
-          variant="filled"
-          onChange={this.onInputChange}
-        /><br/>
-         <TextField
-          id="filled-basic"
-          label="Vorname"
-          variant="filled"
-          onChange={this.onInputChange}
-        /><br/>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            this.personalid = e.target.value;
+          }}
+        />
+        <br />
         <Button variant="contained" onClick={this.sendLogin}>
           Anmelden
         </Button>
