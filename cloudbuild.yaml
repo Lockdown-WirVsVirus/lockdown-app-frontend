@@ -7,6 +7,6 @@ steps:
   args: ['push', 'gcr.io/long-memory-271810/github.com/lockdown-wirvsvirus/lockdown-app-frontend:$BRANCH_NAME']
 # Deploy container image to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['beta', 'run', 'deploy', '$_RUN_SERVICE_NAME', '--image', 'gcr.io/long-memory-271810/github.com/lockdown-wirvsvirus/lockdown-app-frontend:develop', '--region', 'europe-west1', '--platform', 'managed', '--allow-unauthenticated']
+  args: ['beta', 'run', 'deploy', '$_RUN_SERVICE_NAME', '--image', 'gcr.io/long-memory-271810/github.com/lockdown-wirvsvirus/lockdown-app-frontend:$BRANCH_NAME', '--region', 'europe-west1', '--platform', 'managed', '--allow-unauthenticated']
 images:
 - gcr.io/long-memory-271810/github.com/lockdown-wirvsvirus/lockdown-app-frontend:$BRANCH_NAME
