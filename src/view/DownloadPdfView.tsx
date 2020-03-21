@@ -52,11 +52,13 @@ const DownloadPdfView = (props: CheckViewProperties) => {
         <Container maxWidth="sm">
             <p>
                 Das hier demonstriert das Herunterladen der 'Tickets' für den späteren Gebrauch. Offline.<br/>
-                Klicke erst Download, dann gehe zur Open View
+                Klicke erst Download, dann teste ob Open-View funktioniert und dann ob Render-View funktioniert.
             </p>
             <Button variant="contained" onClick={() => handleClick()}>Download 3x PDF</Button><br/>
             <br/>
             <Button variant="outlined" href="/open">Gehe zur Open-View</Button>
+            <br/>
+            <Button variant="outlined" href="/render">Gehe zur Render-View</Button>
         </Container>
     );
 };
