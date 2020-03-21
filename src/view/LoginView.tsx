@@ -2,7 +2,7 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import SHA256 from "crypto-js/sha256";
-
+import Cookies from 'universal-cookie';
 const salt = "234lsnfd";
 
 interface LoginProps {}
@@ -15,6 +15,7 @@ interface LoginState {
 }
 
 export default class LoginView extends React.Component<LoginProps, LoginState> {
+ 
   constructor(pros: any) {
     super(pros);
     this.state = {
@@ -26,8 +27,13 @@ export default class LoginView extends React.Component<LoginProps, LoginState> {
     this.sendLogin = this.sendLogin.bind(this);
   }
 
-  sendLogin() {
+  sendLogin(){
     console.log(SHA256(salt + this.state.personalid).toString());
+    const cookies = new Cookies();
+    cookies.set('firstname', this.state.firstName);
+    cookies.set('lastname', this.state.lastName);
+    cookies.set('personalid', this.state.personalid);
+    cookies.set('hashPersonalID', SHA256(salt + this.state.personalid).toString());
   }
 
   validInput(firstname: String, lastname: String, personalid: String) {
@@ -85,7 +91,7 @@ export default class LoginView extends React.Component<LoginProps, LoginState> {
           }}
         />
         <br />
-        <Button disabled={this.state.disable} onClick={this.sendLogin}>
+        <Button disabled={this.state.disable} href={"\check"} onClick={this.sendLogin}>
           Anmelden
         </Button>
       </div>
