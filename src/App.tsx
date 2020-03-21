@@ -1,19 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import './App.css';
+import LoginView from "./view/LoginView";
+import CheckView from "./view/CheckView";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-        <p>Hello from Lockdown App! 🎸 </p>
-        </p>
-        <p>Automated Deployment Pipeline 🚀</p>
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <Route path="/" exact component={LoginView}/>
+            <Route path="/login" component={LoginView}/>
+            <Route path="/check" component={CheckView}/>
+        </Router>
+    );
 }
 
 export default App;
