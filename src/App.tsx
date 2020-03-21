@@ -10,7 +10,7 @@ function App() {
         <p>
         <p>Hello from Lockdown App! 🎸 </p>
         </p>
-        <p>Automated Develop Branch</p>
+        <p>Automated Deployment Pipeline 🚀</p>
       </header>
     </div>
   );
