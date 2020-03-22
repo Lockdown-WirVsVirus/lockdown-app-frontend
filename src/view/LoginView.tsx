@@ -58,7 +58,7 @@ const LoginView = () => {
     const classes = useStyles();
     return (
         <div>
-            <Header></Header>
+            <Header title="Anmeldung"></Header>
             <Container>
                 <Card className={classes.cards}>
                     <CardContent>
