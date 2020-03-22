@@ -3,6 +3,7 @@ export interface IIdentity {
     firstName: string | null;
     lastName: string | null;
     identificationDocumentId: string | null;
+    hashedIdentificationDocumentId: string | null;
 }
 
 const IdentityProvider = {
@@ -15,6 +16,7 @@ const IdentityProvider = {
                 firstName: null,
                 lastName: null,
                 identificationDocumentId: null,
+                hashedIdentificationDocumentId: null,
             }
         }
     },
@@ -24,6 +26,7 @@ const IdentityProvider = {
             firstName,
             lastName,
             identificationDocumentId,
+            hashedIdentificationDocumentId: identificationDocumentId,
         }));
     }
 }
