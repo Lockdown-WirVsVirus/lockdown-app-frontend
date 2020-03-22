@@ -46,8 +46,8 @@ const LoginView = () => {
         cookies.set('firstname', loginState.firstname);
         cookies.set('lastname', loginState.lastname);
         cookies.set('personalid', loginState.personalId);
-        cookies.set('hashPersonalID', loginState.idHash);
-        IdentityProvider.setIdentity(loginState.firstname, loginState.lastname, loginState.personalId, loginState.idHash);
+        cookies.set('hashPersonalID', hashed);
+        IdentityProvider.setIdentity(loginState.firstname, loginState.lastname, loginState.personalId, hashed);
     }
 
     const onChange = (fieldName: string) => ({target}: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +75,7 @@ const LoginView = () => {
                         </FormControl>
                         <FormControl fullWidth={true}>
                             <InputLabel htmlFor="registReason">Nachname</InputLabel>
-                            <Input name="registReason" id="registReason" onChange={onChange('lastName')}
+                            <Input name="registReason" id="registReason" onChange={onChange('lastname')}
                                    aria-describedby="registReasonHelper"/></FormControl>
                         <FormControl fullWidth={true}>
                             <InputLabel htmlFor="registReason">Personal-ID</InputLabel>
