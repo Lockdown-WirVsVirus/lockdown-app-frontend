@@ -7,7 +7,11 @@ import CheckView from "./view/CheckView";
 import DownloadPdfView from "./view/DownloadPdfView";
 import ShowLsPdfView from "./view/ShowLsPdfView";
 import RenderLsPdfView from "./view/RenderLsPdfView";
+import LeaveRequestView from "./view/LeaveRequestView";
 
+import moment from "moment";
+import "moment/locale/de";
+moment.locale("de");
 
 function App() {
     return (
@@ -19,6 +23,7 @@ function App() {
             <Route path="/download" component={DownloadPdfView}/>
             <Route path="/open" component={ShowLsPdfView}/>
             <Route path="/render" component={RenderLsPdfView}/>
+            <Route path="/leave" component={LeaveRequestView}/>
         </Router>
         </Container>
     );
