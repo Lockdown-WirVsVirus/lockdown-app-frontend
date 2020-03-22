@@ -90,7 +90,7 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
 
     return (
         <div>
-        <Header></Header>
+        <Header title="Neuer Passierschein"></Header>
         <Container>
 
             <Card className={classes.cards}>
