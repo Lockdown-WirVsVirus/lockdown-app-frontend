@@ -7,6 +7,7 @@ import DownloadPdfView from "./view/DownloadPdfView";
 import ShowLsPdfView from "./view/ShowLsPdfView";
 import RenderLsPdfView from "./view/RenderLsPdfView";
 import LeaveRequestView from "./view/LeaveRequestView";
+import TicketDetailsView from "./view/TicketDetails"
 import TicketView from "./view/TicketView";
 import HomeView from "./view/HomeView";
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/leave" component={LeaveRequestView} />
         <Route path="/ticket" component={TicketView} />
         <Route path="/home" component={HomeView} />
+        <Route path="/details" component={TicketDetailsView} />
       </Router>
   );
 }

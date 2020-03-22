@@ -160,7 +160,7 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
             </Card>
 
             <FormControl margin="normal" fullWidth={true}>
-                <Button variant="contained" onClick={handleClick}>Ticket erstellen</Button>
+                <Button variant="contained" onClick={handleClick} href="/details">Ticket erstellen</Button>
             </FormControl>
         </Container>
         </div>
