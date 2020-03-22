@@ -1,9 +1,6 @@
 {
   "snapshot": false,
-  "supportsES6": true,
+  "supportsES6": false,
   "withInterfaces": true,
-  "withSeparateModelsAndApi": true,
-  "apiPackage": "apis",
-  "modelPackage": "models",
   "modelPropertyNaming": "original"
 }

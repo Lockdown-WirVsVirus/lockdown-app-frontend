@@ -1,34 +1,38 @@
-import axios, {AxiosPromise, AxiosResponse} from 'axios';
-import {Configuration, ConfigurationParameters, DefaultApi} from "../gen-backend-api";
+import {AxiosPromise} from 'axios';
+import {Configuration, ConfigurationParameters} from "../gen-backend-api/configuration";
 import WindowConfig from "./WindowConfig";
-import {TicketPayload, TicketRequest} from "../gen-backend-api/models";
+import {TicketPayload, TicketRequest, DefaultApi} from "../gen-backend-api/api";
 
 
-class TicketFacade {
-
-    static instance: TicketFacade;
+class TicketFacadeImpl {
+    static instance: TicketFacadeImpl;
     private config: Configuration = new Configuration({basePath: WindowConfig.BACKEND_URL} as ConfigurationParameters);
     private api: DefaultApi = new DefaultApi(this.config);
 
+
     constructor() {
-        if (TicketFacade.instance) {
-            return TicketFacade.instance
+        if (TicketFacadeImpl.instance) {
+            return TicketFacadeImpl.instance;
         }
-        TicketFacade.instance = this;
+        TicketFacadeImpl.instance = this;
     }
 
     createTicket(ticketPayload: TicketPayload): AxiosPromise<TicketRequest> {
         return this.api.addTicketRequest(ticketPayload);
     }
 
-    getAllTickets(id:number, pin:number){
+    getAllTickets(id: number, pin: number) {
         return this.api.getTicketRequest(id, pin);
     }
 
-    getAllByPin(pin:number, hash:string){
-        return this.api.findTicketRequestsByPin(pin,hash);
+    getAllByPin(pin: number, hash: string) {
+        return this.api.findTicketRequestsByPin(pin, hash);
     }
 
 }
+
+const TicketFacade = (function () {
+    return new TicketFacadeImpl();
+})()
 
 export default TicketFacade;

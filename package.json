@@ -37,9 +37,6 @@
     "eject": "react-scripts eject",
     "api": "rm -rf src/gen-backend-api && openapi-generator generate -i https://raw.githubusercontent.com/Lockdown-WirVsVirus/lockdown-app-backend/master/api.yml --generator-name typescript-axios -o src/gen-backend-api --config api.json && cd src/gen-backend-api && npm install"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

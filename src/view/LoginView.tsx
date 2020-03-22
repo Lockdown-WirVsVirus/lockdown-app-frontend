@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import SHA256 from "crypto-js/sha256";
 import Cookies from 'universal-cookie';
 
 import IdentityProvider from "../service/identityProvider";
-import WindowConfig from "../service/WindowConfig";
+import {UserIdentity} from "../model/UserIdentity";
 
 const salt = "234lsnfd";
 
@@ -19,88 +19,62 @@ interface LoginState {
     disable: boolean;
 }
 
-export default class LoginView extends React.Component<LoginProps, LoginState> {
+const LoginView = (isLoggedIn: boolean) => {
+    const [loginState, setLoginState] = useState<UserIdentity>({} as UserIdentity);
 
-    constructor(pros: any) {
-        super(pros);
-        this.state = {
-            personalid: "",
-            firstName: "",
-            lastName: "",
-            disable: false
-        };
-        this.sendLogin = this.sendLogin.bind(this);
-    }
-
-    sendLogin() {
-        console.log(SHA256(salt + this.state.personalid).toString());
+    const sendLogin = () => {
+        console.log(SHA256(salt + loginState.personalId).toString());
         const cookies = new Cookies();
-        cookies.set('firstname', this.state.firstName);
-        cookies.set('lastname', this.state.lastName);
-        cookies.set('personalid', this.state.personalid);
-        cookies.set('hashPersonalID', SHA256(salt + this.state.personalid).toString());
+        cookies.set('firstname', loginState.firstname);
+        cookies.set('lastname', loginState.lastname);
+        cookies.set('personalid', loginState.personalId);
+        cookies.set('hashPersonalID', SHA256(salt + loginState.personalId).toString());
 
-        IdentityProvider.setIdentity(this.state.firstName, this.state.lastName, this.state.personalid);
+        IdentityProvider.setIdentity(loginState.firstname, loginState.lastname, loginState.personalId);
     }
 
-    validInput(firstname: String, lastname: String, personalid: String) {
-        // let result = !(
-        //   firstname.length > 0 &&
-        //   lastname.length > 0 &&
-        //   personalid.length == 10
-        // );
-        // this.setState({ disable: result });
+
+    const onChange = (fieldName: string) => ({target}: React.ChangeEvent<HTMLInputElement>) => {
+        const newState: UserIdentity = {...loginState, [fieldName]: target.value} as UserIdentity;
+        setLoginState(newState);
+        validInput(
+            target.value,
+            loginState.lastname,
+            loginState.personalId);
     }
 
-    render() {
-        return (
-            <div className="LoginView">
-                <TextField
-                    id="filled-basic"
-                    label="Vorname"
-                    variant="filled"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        this.setState({firstName: e.target.value});
-                        this.validInput(
-                            e.target.value,
-                            this.state.lastName,
-                            this.state.personalid
-                        );
-                    }}
-                />
-                <br/>
-                <TextField
-                    id="filled-basic"
-                    label="Nachname"
-                    variant="filled"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        this.setState({lastName: e.target.value});
-                        this.validInput(
-                            this.state.firstName,
-                            e.target.value,
-                            this.state.personalid
-                        );
-                    }}
-                />
-                <br/>
-                <TextField
-                    id="filled-basic"
-                    label="Personal-ID"
-                    variant="filled"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        this.setState({personalid: e.target.value});
-                        this.validInput(
-                            this.state.firstName,
-                            this.state.lastName,
-                            e.target.value
-                        );
-                    }}
-                />
-                <br/>
-                <Button variant="contained" disabled={this.state.disable} href={"leave"} onClick={this.sendLogin}>
-                    Anmelden
-                </Button>
-            </div>
-        );
+    const validInput = (firstname: String, lastname: String, personalid: String) => {
+
     }
+
+    return (
+        <div className="LoginView">
+            <TextField
+                id="filled-basic"
+                label="Vorname"
+                variant="filled"
+                onChange={onChange('firstname')}
+            />
+            <br/>
+            <TextField
+                id="filled-basic"
+                label="Nachname"
+                variant="filled"
+                onChange={onChange('lastname')}
+            />
+            <br/>
+            <TextField
+                id="filled-basic"
+                label="Personal-ID"
+                variant="filled"
+                onChange={onChange('personalId')}
+            />
+            <br/>
+            <Button variant="contained" disabled={loginState.disable} href={"leave"} onClick={sendLogin}>
+                Anmelden
+            </Button>
+        </div>
+    );
 }
+
+export default LoginView;

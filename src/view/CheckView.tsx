@@ -1,6 +1,6 @@
 import React, {useEffect} from "react"
 import Cookies from 'universal-cookie';
-import {TicketPayload, Address} from "../gen-backend-api/models";
+import {TicketPayload, Address} from "../gen-backend-api/api";
 import TicketFacade from "../service/TicketFacade";
 
 
@@ -13,8 +13,7 @@ const CheckView = (props: CheckViewProperties) => {
     console.log(cookies.get("hashPersonalID"))
 
     useEffect(() => {
-        const facade = new TicketFacade();
-        const payload:TicketPayload = {
+        const payload: TicketPayload = {
             arrivalTime: new Date().getTime(),
             finishPosition: {} as Address,
             hashIdentityNumber: '234234234',
@@ -24,8 +23,12 @@ const CheckView = (props: CheckViewProperties) => {
             startPosition: {} as Address,
             userPin: 1232
         } as unknown as TicketPayload
-        console.log(facade.createTicket(payload));
-    },[])
+        TicketFacade.createTicket(payload).then(result => {
+            console.log(result);
+        }).catch(error => {
+            console.error(error);
+        });
+    }, [])
     return (
         <h2>{cookies.get("firstname")}</h2>
     );
