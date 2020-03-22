@@ -19,9 +19,11 @@ const RenderLsPdfView = (props: CheckViewProperties) => {
     }
 
     const dataUri: string = window.localStorage.getItem('Test1.pdf') as string;
+    const objectUrl = URL.createObjectURL(dataURItoBlob(dataUri));
+    console.log(objectUrl);
 
     return (
-        <iframe width="50%" height="500px" src={dataUri}></iframe>
+        <iframe width="100%" height="500px" src={objectUrl}></iframe>
     );
 };
 
