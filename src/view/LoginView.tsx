@@ -15,7 +15,7 @@ interface LoginState {
 }
 
 export default class LoginView extends React.Component<LoginProps, LoginState> {
- 
+
   constructor(pros: any) {
     super(pros);
     this.state = {
@@ -48,7 +48,7 @@ export default class LoginView extends React.Component<LoginProps, LoginState> {
 
   render() {
     return (
-      <div>
+      <div className="LoginView">
         <TextField
           id="filled-basic"
           label="Vorname"
