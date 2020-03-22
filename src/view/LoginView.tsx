@@ -48,7 +48,7 @@ const LoginView = () => {
     cookies.set('personalid', personal);
     cookies.set('hashPersonalID', hashed);
 
-    IdentityProvider.setIdentity(firstName, lastName, personal, hashed);
+    IdentityProvider.setIdentity(firstname, lastname, personal, hashed);
   }
 
   const classes = useStyles();
