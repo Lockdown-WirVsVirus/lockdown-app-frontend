@@ -1,5 +1,4 @@
 import React from "react"
-import Container from '@material-ui/core/Container';
 
 export interface CheckViewProperties {
 
@@ -22,9 +21,7 @@ const RenderLsPdfView = (props: CheckViewProperties) => {
     const dataUri: string = window.localStorage.getItem('Test1.pdf') as string;
 
     return (
-        <Container>
-            <iframe width="50%" height="500px" src={dataUri}></iframe>
-        </Container>
+        <iframe width="50%" height="500px" src={dataUri}></iframe>
     );
 };
 

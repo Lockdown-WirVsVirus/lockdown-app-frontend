@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import './App.css';
+import Container from '@material-ui/core/Container';
 import LoginView from "./view/LoginView";
 import CheckView from "./view/CheckView";
 import DownloadPdfView from "./view/DownloadPdfView";
@@ -10,6 +11,7 @@ import RenderLsPdfView from "./view/RenderLsPdfView";
 
 function App() {
     return (
+        <Container maxWidth="sm">
         <Router>
             <Route path="/" exact component={LoginView}/>
             <Route path="/login" component={LoginView}/>
@@ -18,6 +20,7 @@ function App() {
             <Route path="/open" component={ShowLsPdfView}/>
             <Route path="/render" component={RenderLsPdfView}/>
         </Router>
+        </Container>
     );
 }
 
