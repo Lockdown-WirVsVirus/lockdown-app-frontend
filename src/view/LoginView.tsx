@@ -49,7 +49,7 @@ const LoginView = () => {
   const classes = useStyles();
   return (
     <div>
-      <Header title="Registierung"></Header>
+      <Header></Header>
     <Card className={classes.cards}>
       <CardContent>
         <Typography color="textPrimary" gutterBottom>
