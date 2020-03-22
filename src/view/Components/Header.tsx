@@ -19,10 +19,11 @@ const useStyles = makeStyles(theme => ({
     // background: "linear-gradient(180deg, rgba(0,75,118,1) 50%, rgba(90,173,221,1) 100%);"
   },
   toolbar: {
-    minHeight: `15vh`,
+    minHeight: `18vh`,
   },
   typography: {
-    align: "center"
+    align: "center",
+    height: "8vh"
   }
 }));
 

@@ -3,6 +3,7 @@ import moment from "moment";
 import Cookies from 'universal-cookie';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
+    Container,
     FormControl,
     Input,
     InputLabel,
@@ -23,6 +24,7 @@ import {
   KeyboardDateTimePicker,
 } from '@material-ui/pickers';
 
+import Header from "./Components/Header";
 import IdentityProvider from "../service/identityProvider";
 
 export interface LeaveRequestViewProperties {
@@ -49,8 +51,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LeaveRequestView = (props: LeaveRequestViewProperties) => {
     const classes = useStyles();
-
-    let firstName = IdentityProvider.getIdentity().firstName;
 
     // States
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(new Date());
@@ -92,9 +92,8 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
 
     return (
         <div>
-            <div>
-                <h3>Hallo {firstName}</h3>
-            </div>
+        <Header></Header>
+        <Container>
 
             <Card className={classes.cards}>
                 <CardContent>
@@ -220,6 +219,7 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
             <FormControl margin="normal" fullWidth={true}>
                 <Button variant="contained" onClick={handleClick}>Ticket erstellen</Button>
             </FormControl>
+        </Container>
         </div>
     );
 };
