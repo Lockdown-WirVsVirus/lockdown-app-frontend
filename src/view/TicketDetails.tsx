@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     textAlign: "left"
-  }
+  },
+ 
 }));
 
 const TicketDetailsView = () => {
@@ -46,11 +47,15 @@ const TicketDetailsView = () => {
             </Typography>
           </Grid>
         </Grid>
-        <CardMedia
-          style={{ height: 50, paddingTop: "56.25%" }}
-          image="/qr/Chart.png"
-          title="Paella dish"
-        />
+
+        <Grid container direction="column" alignItems="center" justify="center">
+        <Grid item xs={12} >
+       
+         <img src="/qr/chart.png"/>
+            </Grid>
+        </Grid>
+       
+       <br/>
 
         <Container>
           <Grid container spacing={0}>
@@ -60,8 +65,8 @@ const TicketDetailsView = () => {
               </Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography className={classes.paper} variant="h5">
                 23.März.2020
+              <Typography className={classes.paper} variant="h5">
               </Typography>
             </Grid>
             <Grid item xs={6}>
