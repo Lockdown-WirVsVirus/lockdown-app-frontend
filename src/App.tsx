@@ -15,7 +15,6 @@ moment.locale("de");
 
 function App() {
   return (
-    //<Container maxWidth="sm">
       <Router>
         <Route path="/" exact component={LoginView} />
         <Route path="/login" component={LoginView} />
@@ -25,7 +24,6 @@ function App() {
         <Route path="/render" component={RenderLsPdfView} />
         <Route path="/leave" component={LeaveRequestView} />
       </Router>
-   // </Container>
   );
 }
 

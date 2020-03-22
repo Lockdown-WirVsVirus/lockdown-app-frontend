@@ -16,7 +16,6 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 0,
     alignItems: "center",
     background: "rgba(0,75,118,1)",
-    // background: "linear-gradient(180deg, rgba(0,75,118,1) 50%, rgba(90,173,221,1) 100%);"
   },
   toolbar: {
     minHeight: `18vh`,
