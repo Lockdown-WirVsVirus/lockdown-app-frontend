@@ -1,6 +1,5 @@
 import React from "react"
 import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -49,15 +48,17 @@ const DownloadPdfView = (props: CheckViewProperties) => {
     }
 
     return (
-        <Container maxWidth="sm">
+        <div>
             <p>
                 Das hier demonstriert das Herunterladen der 'Tickets' für den späteren Gebrauch. Offline.<br/>
-                Klicke erst Download, dann gehe zur Open View
+                Klicke erst Download, dann teste ob Open-View funktioniert und dann ob Render-View funktioniert.
             </p>
             <Button variant="contained" onClick={() => handleClick()}>Download 3x PDF</Button><br/>
             <br/>
             <Button variant="outlined" href="/open">Gehe zur Open-View</Button>
-        </Container>
+            <br/>
+            <Button variant="outlined" href="/render">Gehe zur Render-View</Button>
+        </div>
     );
 };
 
