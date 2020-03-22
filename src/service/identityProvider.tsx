@@ -22,6 +22,11 @@ const IdentityProvider = {
     },
 
     setIdentity(firstName: string, lastName: string, identificationDocumentId: string, hashedIdentificationDocumentId: string) {
+
+        // console.log('set identity', {
+        //     firstName, lastName, identificationDocumentId, hashedIdentificationDocumentId,
+        // });
+
         window.localStorage.setItem('identity', JSON.stringify({
             firstName,
             lastName,
