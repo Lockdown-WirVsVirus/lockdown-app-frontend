@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface HeaderProps {
+  title?:String;
 }
 
 
@@ -34,7 +35,7 @@ const Header = (props: HeaderProps) => {
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6" className={classes.typography}>
-            Registrierung
+            {props.title || "Registrierung"}
           </Typography>
         </Toolbar>
       </AppBar>
