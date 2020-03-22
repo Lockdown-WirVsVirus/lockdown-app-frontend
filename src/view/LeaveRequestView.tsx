@@ -19,6 +19,8 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
+import IdentityProvider from "../service/identityProvider";
+
 export interface LeaveRequestViewProperties {
 
 }
@@ -40,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LeaveRequestView = (props: LeaveRequestViewProperties) => {
 
+    const firstName = IdentityProvider.getIdentity().firstName;
 
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(
         new Date(),
@@ -53,6 +56,9 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
     const classes = useStyles();
     return (
         <div>
+            <div>
+                <h3>Hallo {firstName}</h3>
+            </div>
             <FormControl fullWidth={true}>
                 <InputLabel htmlFor="requestStartAddress">Start Adresse</InputLabel>
                 <Input id="requestStartAddress" aria-describedby="requestStartAddressHelper" />

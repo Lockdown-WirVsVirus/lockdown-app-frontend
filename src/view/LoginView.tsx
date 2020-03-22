@@ -3,14 +3,17 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import SHA256 from "crypto-js/sha256";
 import Cookies from 'universal-cookie';
+
+import IdentityProvider from "../service/identityProvider";
+
 const salt = "234lsnfd";
 
 interface LoginProps {}
 
 interface LoginState {
-  personalid: String;
-  firstName: String;
-  lastName: String;
+  personalid: string;
+  firstName: string;
+  lastName: string;
   disable: boolean;
 }
 
@@ -22,7 +25,7 @@ export default class LoginView extends React.Component<LoginProps, LoginState> {
       personalid: "",
       firstName: "",
       lastName: "",
-      disable: Boolean(1)
+      disable: false
     };
     this.sendLogin = this.sendLogin.bind(this);
   }
@@ -34,16 +37,17 @@ export default class LoginView extends React.Component<LoginProps, LoginState> {
     cookies.set('lastname', this.state.lastName);
     cookies.set('personalid', this.state.personalid);
     cookies.set('hashPersonalID', SHA256(salt + this.state.personalid).toString());
+
+    IdentityProvider.setIdentity(this.state.firstName, this.state.lastName, this.state.personalid);
   }
 
   validInput(firstname: String, lastname: String, personalid: String) {
-    let result = !(
-      firstname.length > 0 &&
-      lastname.length > 0 &&
-      personalid.length > 9 &&
-      personalid.length < 11
-    );
-    this.setState({ disable: result });
+    // let result = !(
+    //   firstname.length > 0 &&
+    //   lastname.length > 0 &&
+    //   personalid.length == 10
+    // );
+    // this.setState({ disable: result });
   }
 
   render() {
@@ -91,7 +95,7 @@ export default class LoginView extends React.Component<LoginProps, LoginState> {
           }}
         />
         <br />
-        <Button disabled={this.state.disable} href={"\check"} onClick={this.sendLogin}>
+        <Button variant="contained" disabled={this.state.disable} href={"leave"} onClick={this.sendLogin}>
           Anmelden
         </Button>
       </div>
