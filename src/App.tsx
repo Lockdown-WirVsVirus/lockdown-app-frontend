@@ -1,18 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {BrowserRouter as Router, Route} from "react-router-dom";
+import "./App.css";
+import LoginView from "./view/LoginView";
+import CheckView from "./view/CheckView";
+import DownloadPdfView from "./view/DownloadPdfView";
+import ShowLsPdfView from "./view/ShowLsPdfView";
+import RenderLsPdfView from "./view/RenderLsPdfView";
+import LeaveRequestView from "./view/LeaveRequestView";
+
+import moment from "moment";
+import "moment/locale/de";
+
+moment.locale("de");
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-        <p>Hello from Lockdown App! 🎸 </p>
-        </p>
-        <p>Automated Deployment Pipeline 🚀</p>
-      </header>
-    </div>
+      <Router>
+        <Route path="/" exact component={LoginView} />
+        <Route path="/login" component={LoginView} />
+        <Route path="/check" component={CheckView} />
+        <Route path="/download" component={DownloadPdfView} />
+        <Route path="/open" component={ShowLsPdfView} />
+        <Route path="/render" component={RenderLsPdfView} />
+        <Route path="/leave" component={LeaveRequestView} />
+      </Router>
   );
 }
 
