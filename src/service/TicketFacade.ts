@@ -4,8 +4,8 @@ import WindowConfig from "./WindowConfig";
 import {TicketPayload, TicketRequest, DefaultApi} from "../gen-backend-api/api";
 
 
-class TicketFacadeImpl {
-    static instance: TicketFacadeImpl;
+class TicketFacadeImpl <T extends TicketPayload>{
+    static instance: TicketFacadeImpl<any>;
     private config: Configuration = new Configuration({basePath: WindowConfig.BACKEND_URL} as ConfigurationParameters);
     private api: DefaultApi = new DefaultApi(this.config);
 
@@ -17,7 +17,7 @@ class TicketFacadeImpl {
         TicketFacadeImpl.instance = this;
     }
 
-    createTicket(ticketPayload: TicketPayload): AxiosPromise<TicketRequest> {
+    createTicket(ticketPayload: T): AxiosPromise<TicketRequest> {
         return this.api.addTicketRequest(ticketPayload);
     }
 
