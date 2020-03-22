@@ -2,6 +2,9 @@ import React, {useEffect} from "react"
 import Cookies from 'universal-cookie';
 import {TicketPayload, Address} from "../gen-backend-api/api";
 import TicketFacade from "../service/TicketFacade";
+import { Document } from 'react-pdf';
+import Header from "./Components/Header";
+
 
 
 export interface CheckViewProperties {
@@ -30,7 +33,7 @@ const CheckView = (props: CheckViewProperties) => {
         });
     }, [])
     return (
-        <h2>{cookies.get("firstname")}</h2>
+        <Header title="Check"></Header>
     );
 };
 

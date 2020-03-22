@@ -83,7 +83,7 @@ const LoginView = () => {
                                    aria-describedby="registReasonHelper"/>
                         </FormControl>
                         <FormControl margin="normal" fullWidth={true}>
-                            <Button variant="contained" href={"\check"} onClick={sendLogin}>Anmelden</Button>
+                            <Button variant="contained" href={"\leave"} onClick={sendLogin}>Anmelden</Button>
                         </FormControl>
                     </CardContent>
                 </Card>
