@@ -63,7 +63,7 @@ const CheckView = (props: CheckViewProperties) => {
   return (
     <div>
       <Header title="Ticket-View" />
-      <Container>
+      
         <Card className={classes.cards}>
           <CardContent>
             <Document
@@ -72,11 +72,11 @@ const CheckView = (props: CheckViewProperties) => {
                 console.log("Source success");
               }}
             >
-              <Page pageNumber={1} height={100} className="PDFPage PDFPageOne" />
+              <Page pageNumber={1} height={300} width={300} className="PDFPage PDFPageOne" />
             </Document>
           </CardContent>
         </Card>
-      </Container>
+     
     </div>
   );
 };
