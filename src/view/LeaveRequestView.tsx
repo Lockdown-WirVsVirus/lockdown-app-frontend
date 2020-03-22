@@ -74,6 +74,38 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
                 <Input id="requestReason" aria-describedby="requestReasonHelper" />
                 <FormHelperText id="requestReasonHelper">Wähle einen Grund aus.</FormHelperText>
             </FormControl>
+
+            <h3>Rich UI Date Time Picker</h3>
+            <MuiPickersUtilsProvider utils={MomentUtils} libInstance={moment} locale="de">
+                <Grid container justify="space-between">
+                    <KeyboardDatePicker
+                        disableToolbar
+                        // variant="inline"
+                        // format="MM/dd/yyyy"
+                        id="date-picker-inline"
+                        label="Datum"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                    />
+
+                    <KeyboardTimePicker
+                        id="time-picker"
+                        format="hh:mm"
+                        label="Uhrzeit"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change time',
+                        }}
+                    />
+                </Grid>
+            </MuiPickersUtilsProvider>
+
+
+            {/*
             <h3>Native Date Time Picker</h3>
             <FormControl fullWidth={true}>
                 <TextField
@@ -114,34 +146,8 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
                     }}
                 />
             </FormControl>
-            <h3>Rich UI Date Time Picker</h3>
-            <MuiPickersUtilsProvider utils={MomentUtils} libInstance={moment} locale="de">
-                <Grid container justify="space-between">
-                    <KeyboardDatePicker
-                        disableToolbar
-                        // variant="inline"
-                        // format="MM/dd/yyyy"
-                        id="date-picker-inline"
-                        label="Datum"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
+            */}
 
-                    <KeyboardTimePicker
-                        id="time-picker"
-                        format="hh:mm"
-                        label="Uhrzeit"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change time',
-                        }}
-                    />
-                </Grid>
-            </MuiPickersUtilsProvider>
             <FormControl margin="normal" fullWidth={true}>
                 <Button variant="contained">Ticket erstellen</Button>
             </FormControl>
