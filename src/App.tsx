@@ -7,6 +7,8 @@ import DownloadPdfView from "./view/DownloadPdfView";
 import ShowLsPdfView from "./view/ShowLsPdfView";
 import RenderLsPdfView from "./view/RenderLsPdfView";
 import LeaveRequestView from "./view/LeaveRequestView";
+import TicketView from "./view/TicketView";
+import HomeView from "./view/HomeView";
 
 import moment from "moment";
 import "moment/locale/de";
@@ -23,6 +25,8 @@ function App() {
         <Route path="/open" component={ShowLsPdfView} />
         <Route path="/render" component={RenderLsPdfView} />
         <Route path="/leave" component={LeaveRequestView} />
+        <Route path="/ticket" component={TicketView} />
+        <Route path="/home" component={HomeView} />
       </Router>
   );
 }
