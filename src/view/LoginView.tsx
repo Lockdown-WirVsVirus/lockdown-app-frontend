@@ -4,6 +4,7 @@ import Cookies from "universal-cookie";
 import Header from "./Components/Header";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
+  Container,
   FormControl,
   Input,
   InputLabel,
@@ -77,7 +78,7 @@ const LoginView = () => {
             </FormControl>
           </CardContent>
         </Card>
-      <Container>
+      </Container>
     </div>
   );
 };
