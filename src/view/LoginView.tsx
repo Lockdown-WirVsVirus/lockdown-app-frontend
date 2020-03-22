@@ -50,31 +50,32 @@ const LoginView = () => {
   return (
     <div>
       <Header></Header>
-    <Card className={classes.cards}>
-      <CardContent>
-        <Typography color="textPrimary" gutterBottom>
-          Was möchtest du tun?
-        </Typography>
-        <Typography color="textSecondary">
-          Geben Sie ihre Daten für die Registierung ein.
-        </Typography>
-        <FormControl fullWidth={true}><InputLabel htmlFor="registReason">Vorname</InputLabel>
-        <Input name="registReason" id="registReason" onChange={e => setFirstname(e.target.value)} aria-describedby="registReasonHelper" />
-        
-          </FormControl>
-          <FormControl fullWidth={true}>
-          <InputLabel htmlFor="registReason">Nachname</InputLabel>
-          <Input name="registReason" id="registReason" onChange={e => setLastname(e.target.value)} aria-describedby="registReasonHelper" /></FormControl>
-           <FormControl fullWidth={true}>
-          <InputLabel htmlFor="registReason">Personal-ID</InputLabel>
-          <Input name="registReason" id="registReason" onChange={e => setPersonal(e.target.value)} aria-describedby="registReasonHelper" />
-        </FormControl>
-        <FormControl margin="normal" fullWidth={true}>
-                <Button variant="contained" href={"\check"} onClick={sendLogin}>Anmelden</Button>
+      <Container>
+        <Card className={classes.cards}>
+          <CardContent>
+            <Typography color="textPrimary" gutterBottom>
+              Was möchtest du tun?
+            </Typography>
+            <Typography color="textSecondary">
+              Geben Sie ihre Daten für die Registierung ein.
+            </Typography>
+            <FormControl fullWidth={true}><InputLabel htmlFor="registReason">Vorname</InputLabel>
+            <Input name="registReason" id="registReason" onChange={e => setFirstname(e.target.value)} aria-describedby="registReasonHelper" />
+
+              </FormControl>
+              <FormControl fullWidth={true}>
+              <InputLabel htmlFor="registReason">Nachname</InputLabel>
+              <Input name="registReason" id="registReason" onChange={e => setLastname(e.target.value)} aria-describedby="registReasonHelper" /></FormControl>
+              <FormControl fullWidth={true}>
+              <InputLabel htmlFor="registReason">Personal-ID</InputLabel>
+              <Input name="registReason" id="registReason" onChange={e => setPersonal(e.target.value)} aria-describedby="registReasonHelper" />
             </FormControl>
-      </CardContent>
-    </Card>
-    
+            <FormControl margin="normal" fullWidth={true}>
+                    <Button variant="contained" href={"\check"} onClick={sendLogin}>Anmelden</Button>
+                </FormControl>
+          </CardContent>
+        </Card>
+      <Container>
     </div>
   );
 };
