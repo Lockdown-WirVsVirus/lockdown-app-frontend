@@ -1,0 +1,11 @@
+{
+  "npmName": "fastpass-api",
+  "npmVersion": "1.0.0",
+  "snapshot": false,
+  "supportsES6": true,
+  "withInterfaces": true,
+  "withSeparateModelsAndApi": true,
+  "apiPackage": "apis",
+  "modelPackage": "models",
+  "modelPropertyNaming": "original"
+}
