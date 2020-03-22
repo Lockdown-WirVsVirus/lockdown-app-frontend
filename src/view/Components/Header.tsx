@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-
+const drawerWidth = 0;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,12 +14,11 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     marginLeft: 0,
-    alignItems: "center"
+    alignItems: "center",
+    background: "#0778A5"
   },
   toolbar: {
     minHeight: `15vh`,
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(2)
   },
   typography: {
     align: "center"
