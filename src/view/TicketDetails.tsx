@@ -19,6 +19,8 @@ import {
   Typography
 } from "@material-ui/core";
 
+import IdentityProvider from "../service/identityProvider";
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
@@ -88,7 +90,8 @@ const TicketDetailsView = () => {
               </Grid>
               <Grid item xs={6}>
                 <Typography className={classes.paper} variant="h6">
-                  Erika Mustermann
+
+                  { IdentityProvider.getIdentity()?.firstName || 'Erika'} { IdentityProvider.getIdentity()?.lastName || 'Musterfrau'}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -98,7 +101,7 @@ const TicketDetailsView = () => {
               </Grid>
               <Grid item xs={6}>
                 <Typography className={classes.paper} variant="h6">
-                  11111A1111
+                  { IdentityProvider.getIdentity()?.identificationDocumentId || '11111A1111'}
                 </Typography>
               </Grid>
             </Grid>
