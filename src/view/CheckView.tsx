@@ -1,7 +1,7 @@
 import React, {useEffect} from "react"
 import Cookies from 'universal-cookie';
-import TicketFacade from "../service/TicketFacade";
 import {TicketPayload, Address} from "../gen-backend-api/models";
+import TicketFacade from "../service/TicketFacade";
 
 
 export interface CheckViewProperties {
