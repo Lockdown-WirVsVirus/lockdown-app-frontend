@@ -16,6 +16,8 @@ import {
   Typography
 } from "@material-ui/core";
 
+import IdentityProvider from "../service/identityProvider";
+
 const salt = "234lsnfd";
 
 const useStyles = makeStyles((theme: Theme) =>
