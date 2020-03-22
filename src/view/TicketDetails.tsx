@@ -26,95 +26,85 @@ const useStyles = makeStyles(theme => ({
   paper: {
     textAlign: "left"
   },
- 
+
 }));
 
 const TicketDetailsView = () => {
   const classes = useStyles();
   return (
     <div>
-      <div className={classes.root}>
-        <Header title="Ticket Details" />
-        <Grid container spacing={0}>
-          <Grid item xs={12}>
-            <Typography className={classes.paper} variant="h6">
-              <b>Hamburg</b>
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography className={classes.paper} variant="h5">
-              <b>Lebensmittel</b>
-            </Typography>
-          </Grid>
-        </Grid>
+      <Header title="Ticket Details" />
+      <Container>
+        <Card>
+          <CardContent>
 
-        <Grid container direction="column" alignItems="center" justify="center">
-        <Grid item xs={12} >
-       
-         <img src="/qr/chart.png"/>
+            <Grid container spacing={0}>
+              <Grid item xs={12}>
+                <Typography className={classes.paper} variant="h6">
+                  <b>Hamburg</b>
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography className={classes.paper} variant="h5">
+                  <b>Lebensmittel</b>
+                </Typography>
+              </Grid>
             </Grid>
-        </Grid>
-       
-       <br/>
 
-        <Container>
-          <Grid container spacing={0}>
-            <Grid item xs={6}>
-              <Typography className={classes.paper} variant="h6">
-                <b>Datum</b>
-              </Typography>
+            <Grid container direction="column" alignItems="center" justify="center">
+              <Grid item xs={12} >
+                <img src="/qr/chart.png"/>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-                23.März.2020
-              <Typography className={classes.paper} variant="h5">
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography className={classes.paper} variant="h6">
-                <b>Uhrzeit</b>
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography className={classes.paper} variant="h5">
-                14:15-16:00
-              </Typography>
-            </Grid>
-          </Grid>
-        </Container>
-        <br />
 
-        <Container>
-          <Grid container spacing={0}>
-            <Grid item xs={6}>
-              <Typography className={classes.paper} variant="h5">
-                <b>Name</b>
-              </Typography>
+            <Grid container spacing={0}>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h6">
+                  <b>Datum</b>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                  23.März.2020
+                <Typography className={classes.paper} variant="h5">
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h6">
+                  <b>Uhrzeit</b>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h5">
+                  14:15-16:00
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Typography className={classes.paper} variant="h6">
-                Erika Mustermann
-              </Typography>
+
+            <Grid container spacing={0}>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h5">
+                  <b>Name</b>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h6">
+                  Erika Mustermann
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h5">
+                  <b>Ausweis-ID</b>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h6">
+                  11111A1111
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Typography className={classes.paper} variant="h5">
-                <b>Ausweis-ID</b>
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography className={classes.paper} variant="h6">
-                11111A1111
-              </Typography>
-            </Grid>
-          </Grid>
-        </Container>
-        <Grid container direction="column" alignItems="center" justify="center">
-          <Grid item xs={12}>
-            <Button color="primary">
-              <u>weitere Details</u>
-            </Button>
-          </Grid>
-        </Grid>
-      </div>
+          </CardContent>
+        </Card>
+      </Container>
     </div>
   );
 };
