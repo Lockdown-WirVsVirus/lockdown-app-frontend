@@ -36,9 +36,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const LoginView = () => {
-  const [lastname, setLastname] = React.useState<String | null>("");
-  const [firstname, setFirstname] = React.useState<String | null>("");
-  const [personal, setPersonal] = React.useState<String | null>("");
+  const [lastname, setLastname] = React.useState<string>("");
+  const [firstname, setFirstname] = React.useState<string>("");
+  const [personal, setPersonal] = React.useState<string>("");
 
   const sendLogin= () =>{
     const hashed = SHA256(salt + personal).toString();
