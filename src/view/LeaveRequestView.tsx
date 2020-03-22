@@ -54,14 +54,14 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
     return (
         <div>
             <FormControl fullWidth={true}>
+                <InputLabel htmlFor="requestStartAddress">Start Adresse</InputLabel>
+                <Input id="requestStartAddress" aria-describedby="requestStartAddressHelper" />
+                <FormHelperText id="requestStartAddressHelper">Die Anschrift deines Ausgangspunkt.</FormHelperText>
+            </FormControl>
+            <FormControl fullWidth={true}>
                 <InputLabel htmlFor="requestTargetAddress">Ziel Adresse</InputLabel>
                 <Input id="requestTargetAddress" aria-describedby="requestTargetAddressHelper" />
                 <FormHelperText id="requestTargetAddressHelper">Die Anschrift deines Ziels.</FormHelperText>
-            </FormControl>
-            <FormControl fullWidth={true}>
-                <InputLabel htmlFor="requestReason">Grund</InputLabel>
-                <Input id="requestReason" aria-describedby="requestReasonHelper" />
-                <FormHelperText id="requestReasonHelper">Wähle einen Grund aus.</FormHelperText>
             </FormControl>
             <FormControl fullWidth={true}>
                 <InputLabel htmlFor="requestReason">Grund</InputLabel>
@@ -110,45 +110,33 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
             </FormControl>
             <h3>Rich UI Date Time Picker</h3>
             <MuiPickersUtilsProvider utils={MomentUtils} libInstance={moment} locale="de">
-                <Grid container justify="space-around">
+                <Grid container justify="space-between">
                     <KeyboardDatePicker
-                    disableToolbar
-                    variant="inline"
-                    // format="MM/dd/yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Date picker inline"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
+                        disableToolbar
+                        // variant="inline"
+                        // format="MM/dd/yyyy"
+                        id="date-picker-inline"
+                        label="Datum"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
                     />
-                    <KeyboardDatePicker
-                    margin="normal"
-                    id="date-picker-dialog"
-                    label="Date picker dialog"
-                    // format="MM/dd/yyyy"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
-                    />
+
                     <KeyboardTimePicker
-                    margin="normal"
-                    id="time-picker"
-                    format="hh:mm"
-                    label="Time picker"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    KeyboardButtonProps={{
-                        'aria-label': 'change time',
-                    }}
+                        id="time-picker"
+                        format="hh:mm"
+                        label="Uhrzeit"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change time',
+                        }}
                     />
                 </Grid>
             </MuiPickersUtilsProvider>
-            <FormControl fullWidth={true}>
+            <FormControl margin="normal" fullWidth={true}>
                 <Button variant="contained">Ticket erstellen</Button>
             </FormControl>
         </div>
