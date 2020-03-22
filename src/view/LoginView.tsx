@@ -38,12 +38,14 @@ const LoginView = () => {
   const [personal, setPersonal] = React.useState<String | null>("");
 
   const sendLogin= () =>{
-    console.log(SHA256(salt + personal).toString());
+    const hashed = SHA256(salt + personal).toString();
     const cookies = new Cookies();
     cookies.set('firstname', firstname);
     cookies.set('lastname', lastname);
     cookies.set('personalid', personal);
-    cookies.set('hashPersonalID', SHA256(salt + personal).toString());
+    cookies.set('hashPersonalID', hashed);
+
+    IdentityProvider.setIdentity(firstName, lastName, personal, hashed);
   }
 
   const classes = useStyles();
@@ -54,10 +56,10 @@ const LoginView = () => {
         <Card className={classes.cards}>
           <CardContent>
             <Typography color="textPrimary" gutterBottom>
-              Was möchtest du tun?
+              Über Dich
             </Typography>
             <Typography color="textSecondary">
-              Geben Sie ihre Daten für die Registierung ein.
+              Da Passierscheine immer personenbezogen sind, benötigen wir ein paar Daten über dich.
             </Typography>
             <FormControl fullWidth={true}><InputLabel htmlFor="registReason">Vorname</InputLabel>
             <Input name="registReason" id="registReason" onChange={e => setFirstname(e.target.value)} aria-describedby="registReasonHelper" />
@@ -71,8 +73,8 @@ const LoginView = () => {
               <Input name="registReason" id="registReason" onChange={e => setPersonal(e.target.value)} aria-describedby="registReasonHelper" />
             </FormControl>
             <FormControl margin="normal" fullWidth={true}>
-                    <Button variant="contained" href={"\check"} onClick={sendLogin}>Anmelden</Button>
-                </FormControl>
+                <Button variant="contained" href={"\check"} onClick={sendLogin}>Anmelden</Button>
+            </FormControl>
           </CardContent>
         </Card>
       <Container>
