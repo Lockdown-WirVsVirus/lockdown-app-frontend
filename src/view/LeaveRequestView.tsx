@@ -3,6 +3,7 @@ import moment from "moment";
 import Cookies from 'universal-cookie';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
+    Container,
     FormControl,
     Input,
     InputLabel,
@@ -13,7 +14,7 @@ import {
     CardContent,
     Typography,
 } from '@material-ui/core';
-// Rich
+
 import Grid from '@material-ui/core/Grid';
 import MomentUtils from '@date-io/moment';
 import {
@@ -23,6 +24,7 @@ import {
   KeyboardDateTimePicker,
 } from '@material-ui/pickers';
 
+import Header from "./Components/Header";
 import IdentityProvider from "../service/identityProvider";
 
 export interface LeaveRequestViewProperties {
@@ -37,8 +39,6 @@ const useStyles = makeStyles((theme: Theme) =>
             flexWrap: 'wrap',
         },
         textField: {
-            // marginLeft: theme.spacing(1),
-            // marginRight: theme.spacing(1),
             width: 200,
         },
         cards: {
@@ -49,8 +49,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LeaveRequestView = (props: LeaveRequestViewProperties) => {
     const classes = useStyles();
-
-    let firstName = IdentityProvider.getIdentity().firstName;
 
     // States
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(new Date());
@@ -92,9 +90,8 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
 
     return (
         <div>
-            <div>
-                <h3>Hallo {firstName}</h3>
-            </div>
+        <Header></Header>
+        <Container>
 
             <Card className={classes.cards}>
                 <CardContent>
@@ -137,18 +134,6 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
                     </Typography>
                     <MuiPickersUtilsProvider utils={MomentUtils} libInstance={moment} locale="de">
                         <Grid container justify="space-between">
-                            {/* <KeyboardDatePicker
-                                disableToolbar
-                                // variant="inline"
-                                // format="MM/dd/yyyy"
-                                id="date-picker-inline"
-                                label="Datum"
-                                value={selectedDate}
-                                onChange={handleDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                            /> */}
 
                             <KeyboardDateTimePicker
                                 id="time-picker"
@@ -174,52 +159,10 @@ const LeaveRequestView = (props: LeaveRequestViewProperties) => {
                 </CardContent>
             </Card>
 
-            {/*
-            <h3>Native Date Time Picker</h3>
-            <FormControl fullWidth={true}>
-                <TextField
-                    id="date"
-                    label="Birthday"
-                    type="date"
-                    defaultValue="2017-05-24"
-                    className={classes.textField}
-                    InputLabelProps={{
-                    shrink: true,
-                    }}
-                />
-            </FormControl>
-            <FormControl fullWidth={true}>
-                <TextField
-                    id="datetime-local"
-                    label="Next appointment"
-                    type="datetime-local"
-                    defaultValue="2017-05-24T10:30"
-                    className={classes.textField}
-                    InputLabelProps={{
-                    shrink: true,
-                    }}
-                />
-            </FormControl>
-            <FormControl fullWidth={true}>
-                <TextField
-                    id="time"
-                    label="Alarm clock"
-                    type="time"
-                    defaultValue="07:30"
-                    className={classes.textField}
-                    InputLabelProps={{
-                    shrink: true,
-                    }}
-                    inputProps={{
-                    step: 300, // 5 min
-                    }}
-                />
-            </FormControl>
-            */}
-
             <FormControl margin="normal" fullWidth={true}>
                 <Button variant="contained" onClick={handleClick}>Ticket erstellen</Button>
             </FormControl>
+        </Container>
         </div>
     );
 };

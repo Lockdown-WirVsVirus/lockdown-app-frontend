@@ -3,10 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-const drawerWidth = 0;
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,19 +12,21 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     marginLeft: 0,
     alignItems: "center",
-    background: "#0778A5"
+    background: "rgba(0,75,118,1)",
   },
   toolbar: {
-    minHeight: `15vh`,
+    minHeight: `18vh`,
   },
   typography: {
-    align: "center"
+    align: "center",
+    height: "8vh"
   }
 }));
 
-interface HeaderProps {}
+interface HeaderProps {
+  title?:String;
+}
 
-interface HeaderState {}
 
 const Header = (props: HeaderProps) => {
   const classes = useStyles();
@@ -36,7 +35,7 @@ const Header = (props: HeaderProps) => {
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6" className={classes.typography}>
-            Registrierung
+            {props.title || "Registrierung"}
           </Typography>
         </Toolbar>
       </AppBar>

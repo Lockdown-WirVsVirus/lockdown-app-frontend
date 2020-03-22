@@ -21,12 +21,12 @@ const IdentityProvider = {
         }
     },
 
-    setIdentity(firstName: string, lastName: string, identificationDocumentId: string) {
+    setIdentity(firstName: string, lastName: string, identificationDocumentId: string, hashedIdentificationDocumentId: string) {
         window.localStorage.setItem('identity', JSON.stringify({
             firstName,
             lastName,
             identificationDocumentId,
-            hashedIdentificationDocumentId: identificationDocumentId,
+            hashedIdentificationDocumentId,
         }));
     }
 }
