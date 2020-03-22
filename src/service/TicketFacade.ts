@@ -29,8 +29,6 @@ class TicketFacade {
         return this.api.findTicketRequestsByPin(pin,hash);
     }
 
-
-
 }
 
 export default TicketFacade;
