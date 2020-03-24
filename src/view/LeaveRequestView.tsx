@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from "react"
+import React from "react"
 import moment from "moment";
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import Cookies from 'universal-cookie';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
     Button,
     Card,
@@ -10,7 +11,12 @@ import {
     FormHelperText,
     Input,
     InputLabel,
+    FormHelperText,
+    TextField,
+    Button,
+    Card,
     Select,
+    CardContent,
     Typography,
 } from '@material-ui/core';
 
@@ -214,10 +220,10 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
                     </CardContent>
                 </Card>
 
-                <FormControl margin="normal" fullWidth={true}>
-                    <Button variant="contained" onClick={handleClick}>Ticket erstellen</Button>
-                </FormControl>
-            </Container>
+            <FormControl margin="normal" fullWidth={true}>
+                <Button variant="contained" onClick={handleClick} href="/details">Ticket erstellen</Button>
+            </FormControl>
+        </Container>
         </div>
     );
 };
