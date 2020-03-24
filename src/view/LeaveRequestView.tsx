@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from "react"
+import React, {MouseEventHandler, useReducer, useState} from "react"
 import moment from "moment";
-import Cookies from 'universal-cookie';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {
     Button,
     Card,
@@ -11,7 +10,6 @@ import {
     FormHelperText,
     Input,
     InputLabel,
-    TextField,
     Select,
     Typography,
 } from '@material-ui/core';
@@ -19,7 +17,6 @@ import {
 import Grid from '@material-ui/core/Grid';
 import MomentUtils from '@date-io/moment';
 import {DateTimePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
-
 import Header from "./Components/Header";
 import IdentityProvider from "../service/identityProvider";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -30,6 +27,9 @@ import SnoozeIcon from "@material-ui/icons/Snooze";
 import AlarmIcon from "@material-ui/icons/AddAlarm";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import TicketFacade from "../service/TicketFacade";
+import TicketHelper from "../service/TicketHelper";
+import {useHistory} from 'react-router-dom';
+import {NewTicketReducer} from "../reducer/NewTicketReducer";
 
 export interface LeaveRequestViewProperties {
 
@@ -53,30 +53,23 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProperties) => {
     const classes = useStyles();
+    const history = useHistory();
 
-    const [ticketPayload, setTicketPayload] = useState<T>({} as T);
+    const [ticketPayload] = useReducer<T>(NewTicketReducer, TicketHelper.emptyTicketPayload());
 
-    useEffect(() => {
-        setTicketPayload({...ticketPayload, leaveTime: new Date().getTime()} as T);
-    }, [])
+    // const [ticketPayload, setTicketPayload] = useState<T>({
+    //     ...TicketHelper.emptyTicketPayload(),
+    //     hashIdentityNumber: IdentityProvider.getIdentity().hashedIdentificationDocumentId
+    // } as T);
 
     const handleClick = async () => {
-        /*
-                const ticketResponse = {
-                    "startPosition": requestStartAddress,
-                    "leaveTime": selectedDate,
-                    "finishPosition": requestTargetAddress,
-                    "arrivalTime": targetDate,
-                    "hashIdentityNumber": IdentityProvider.getIdentity().identificationDocumentId,
-                    "reason": requestReason,
-                    "signature": "string",
-                    "userPin": 0
-                }
-
-                console.log('ticketResponse', ticketResponse)*/
         const response = await TicketFacade.createTicket(ticketPayload);
-        console.log('sending to backend => ',response);
-
+        console.log('sending to backend => ', response);
+        if (response.status === 200 || response.status === 201) {
+            history.push('details');
+        } else {
+            // TODO: show error TOAST
+        }
     }
 
     const onReasonChange = ({target}: React.ChangeEvent<{ value: unknown }>): void => {
@@ -88,7 +81,7 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
     }
 
     const onAddressChange = (propertyName: string) => ({target}: React.ChangeEvent<HTMLInputElement>): void => {
-        setTicketPayload({...ticketPayload, [propertyName]: {street: target.value}} as T)
+        setTicketPayload({...ticketPayload, [propertyName]: {...[propertyName], street: target.value}} as T)
     }
 
     const onDateChange = (date: MaterialUiPickersDate): void => {
@@ -136,13 +129,13 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
                         </FormControl>
                         {isWorkTicket() &&
                         <div>
-                            <FormControl fullWidth={true}>
-                                <InputLabel htmlFor="requestStartAddress">Arbeitgeber-Bescheinigung-Code</InputLabel>
-                                <Input name="requestStartAddress" onChange={onEmployerCodeChange}
-                                       aria-describedby="requestStartAddressHelper"/>
-                                <FormHelperText id="requestStartAddressHelper">Bescheinigung-Code des
-                                    Arbeitgebers.</FormHelperText>
-                            </FormControl>
+                          <FormControl fullWidth={true}>
+                            <InputLabel htmlFor="requestStartAddress">Arbeitgeber-Bescheinigung-Code</InputLabel>
+                            <Input name="requestStartAddress" onChange={onEmployerCodeChange}
+                                   aria-describedby="requestStartAddressHelper"/>
+                            <FormHelperText id="requestStartAddressHelper">Bescheinigung-Code des
+                              Arbeitgebers.</FormHelperText>
+                          </FormControl>
                         </div>
                         }
                     </CardContent>
@@ -216,10 +209,10 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
                     </CardContent>
                 </Card>
 
-            <FormControl margin="normal" fullWidth={true}>
-                <Button variant="contained" onClick={handleClick} href="/details">Ticket erstellen</Button>
-            </FormControl>
-        </Container>
+                <FormControl margin="normal" fullWidth={true}>
+                    <Button variant="contained" onClick={handleClick}>Ticket erstellen</Button>
+                </FormControl>
+            </Container>
         </div>
     );
 };

@@ -20,6 +20,7 @@
     "@types/react-pdf": "^4.0.3",
     "axios": "^0.19.2",
     "crypto-js": "^4.0.0",
+    "history": "^4.10.1",
     "moment": "^2.24.0",
     "pdfjs-dist": "^2.2.228",
     "react": "^16.13.1",
