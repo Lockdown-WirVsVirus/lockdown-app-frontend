@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import moment from "moment";
 import Cookies from 'universal-cookie';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -11,12 +11,8 @@ import {
     FormHelperText,
     Input,
     InputLabel,
-    FormHelperText,
     TextField,
-    Button,
-    Card,
     Select,
-    CardContent,
     Typography,
 } from '@material-ui/core';
 
@@ -58,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProperties) => {
     const classes = useStyles();
 
-    const [ticketPayload, setTicketPayload] = useState<T>({} as T);
+    const [ticketPayload, setTicketPayload] = useState()<T>({} as T);
 
     useEffect(() => {
         setTicketPayload({...ticketPayload, leaveTime: new Date().getTime()} as T);
