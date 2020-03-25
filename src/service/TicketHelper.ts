@@ -1,4 +1,4 @@
-import {Address, TicketPayload, TicketRequest} from "../gen-backend-api/api";
+import {Address, TicketPayload} from "../gen-backend-api/api";
 import IdentityProvider from "./identityProvider";
 
 const TicketHelper = {
@@ -24,12 +24,6 @@ const TicketHelper = {
             userPin: 0
         } as T
     },
-    createTicketRequest: ():TicketRequest => {
-        return {
-
-        }
-    }
-
 }
 
 export default TicketHelper;

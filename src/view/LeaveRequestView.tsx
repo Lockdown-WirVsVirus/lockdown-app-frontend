@@ -75,7 +75,7 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
 
     return (
         <div>
-            <Header title="Neuer Passierschein"></Header>
+            <Header title="Neuer Passierschein"/>
             <Container>
                 <Card className={classes.cards}>
                     <CardContent>
