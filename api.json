@@ -1,6 +1,6 @@
 {
   "snapshot": false,
-  "supportsES6": false,
-  "withInterfaces": true,
+  "supportsES6": true,
+  "withInterfaces": false,
   "modelPropertyNaming": "original"
 }

@@ -1,4 +1,5 @@
-import {Address, TicketPayload} from "../gen-backend-api/api";
+import {Address, TicketPayload, TicketRequest} from "../gen-backend-api/api";
+import IdentityProvider from "./identityProvider";
 
 const TicketHelper = {
 
@@ -14,7 +15,7 @@ const TicketHelper = {
     },
     emptyTicketPayload: <T extends TicketPayload>(): T => {
         return {
-            hashIdentityNumber: '',
+            hashIdentityNumber: IdentityProvider.getIdentity().hashedIdentificationDocumentId,
             reason: '',
             leaveTime: new Date(),
             startPosition: TicketHelper.emptyAddress(),
@@ -22,7 +23,13 @@ const TicketHelper = {
             signature: '',
             userPin: 0
         } as T
+    },
+    createTicketRequest: ():TicketRequest => {
+        return {
+
+        }
     }
+
 }
 
 export default TicketHelper;
