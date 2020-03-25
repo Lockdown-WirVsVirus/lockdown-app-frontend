@@ -13,15 +13,17 @@ import HomeView from "./view/HomeView";
 import {createBrowserHistory} from 'history';
 import moment from "moment";
 import "moment/locale/de";
+import IdentityProvider from "./service/identityProvider";
 
 moment.locale("de");
 
 const history = createBrowserHistory()
 
 function App() {
+    console.log('user is logged in => ', IdentityProvider.isLoggedIn());
     return (
         <Router history={history}>
-            <Route path="/" exact component={LoginView}/>
+            <Route path="/" exact component={IdentityProvider.isLoggedIn() ? LeaveRequestView : LoginView}/>
             <Route path="/login" component={LoginView}/>
             <Route path="/check" component={CheckView}/>
             <Route path="/download" component={DownloadPdfView}/>
