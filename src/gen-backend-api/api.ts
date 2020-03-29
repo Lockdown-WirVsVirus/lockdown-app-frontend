@@ -473,59 +473,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
 };
 
 /**
- * DefaultApi - interface
- * @export
- * @interface DefaultApi
- */
-export interface DefaultApiInterface {
-    /**
-     * Create a new Ticket Request
-     * @param {TicketPayload} TicketPayload Create a new TIcketRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApiInterface
-     */
-    addTicketRequest(TicketPayload: TicketPayload, options?: any): AxiosPromise<TicketRequest>;
-
-    /**
-     * deletes a TicketRequest
-     * @param {number} id ID to delete
-     * @param {number} pin pin to of the ID to delete
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApiInterface
-     */
-    deletePet(id: number, pin: number, options?: any): AxiosPromise<void>;
-
-    /**
-     * Returns all Ticket requests identified by the pin
-     * @param {number} pin pin of user
-     * @param {string} hash hashIdentityNumber of the user
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApiInterface
-     */
-    findTicketRequestsByPin(pin: number, hash: string, options?: any): AxiosPromise<Array<TicketRequest>>;
-
-    /**
-     * Returns a user based on a single ID
-     * @param {number} id ID of the ticket request
-     * @param {number} pin Pin for the ID
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApiInterface
-     */
-    getTicketRequest(id: number, pin: number, options?: any): AxiosPromise<TicketRequest>;
-
-}
-
-/**
  * DefaultApi - object-oriented interface
  * @export
  * @class DefaultApi
  * @extends {BaseAPI}
  */
-export class DefaultApi extends BaseAPI implements DefaultApiInterface {
+export class DefaultApi extends BaseAPI {
     /**
      * Create a new Ticket Request
      * @param {TicketPayload} TicketPayload Create a new TIcketRequest

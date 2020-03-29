@@ -20,6 +20,7 @@
     "@types/react-pdf": "^4.0.3",
     "axios": "^0.19.2",
     "crypto-js": "^4.0.0",
+    "history": "^4.10.1",
     "moment": "^2.24.0",
     "pdfjs-dist": "^2.2.228",
     "react": "^16.13.1",
@@ -36,7 +37,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "api": "rm -rf src/gen-backend-api && openapi-generator generate -i https://raw.githubusercontent.com/Lockdown-WirVsVirus/lockdown-app-backend/master/api.yml --generator-name typescript-axios -o src/gen-backend-api --config api.json && cd src/gen-backend-api && npm install"
+    "api": "rm -rf src/gen-backend-api && openapi-generator generate -i https://raw.githubusercontent.com/Lockdown-WirVsVirus/lockdown-app-backend/master/api.yml --generator-name typescript-axios -o src/gen-backend-api --config api.json && cd src/gen-backend-api && npm install && rm -rf .openapi-generator .openapi-generator-ignore .gitignore git_push.sh index.ts"
   },
   "browserslist": {
     "production": [
