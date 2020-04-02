@@ -17,7 +17,7 @@ import {
 import Grid from '@material-ui/core/Grid';
 import MomentUtils from '@date-io/moment';
 import {DateTimePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
-import Header from "./Components/Header";
+import Header from "../components/Header";
 import MenuItem from "@material-ui/core/MenuItem";
 import {TicketPayload} from '../gen-backend-api/api';
 import IconButton from "@material-ui/core/IconButton";

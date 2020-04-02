@@ -5,7 +5,7 @@ import TicketFacade from "../service/TicketFacade";
 import axios from "axios";
 import { Document, pdfjs, Page } from "react-pdf";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Header from "./Components/Header";
+import Header from "../components/Header";
 import {
   Container,
   FormControl,

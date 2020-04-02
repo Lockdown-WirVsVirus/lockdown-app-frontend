@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Cookies from 'universal-cookie';
 
-import Header from "./Components/Header";
+import Header from "../components/Header";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {
     Container,

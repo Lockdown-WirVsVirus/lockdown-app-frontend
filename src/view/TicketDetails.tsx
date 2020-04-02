@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SHA256 from "crypto-js/sha256";
 import Cookies from "universal-cookie";
-import Header from "./Components/Header";
+import Header from "../components/Header";
 import Grid from "@material-ui/core/Grid";
 import CardMedia from "@material-ui/core/CardMedia";
 import Paper from "@material-ui/core/Paper";
