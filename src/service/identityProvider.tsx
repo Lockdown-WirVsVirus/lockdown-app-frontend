@@ -1,8 +1,7 @@
 export interface IIdentity {
-    firstName: string | undefined;
-    lastName: string | undefined;
-    identificationDocumentId: string | undefined;
-    hashedIdentificationDocumentId: string | undefined;
+    firstName: string;
+    lastName: string;
+    identificationDocumentId: string;
 }
 
 const IdentityProvider = {
@@ -15,17 +14,16 @@ const IdentityProvider = {
         }
     },
 
-    setIdentity(firstName: string, lastName: string, identificationDocumentId: string, hashedIdentificationDocumentId: string) {
+    setIdentity(firstName: string, lastName: string, identificationDocumentId: string) {
         window.localStorage.setItem('identity', JSON.stringify({
             firstName,
             lastName,
             identificationDocumentId,
-            hashedIdentificationDocumentId,
         }));
     },
     isLoggedIn() {
         const identity = IdentityProvider.getIdentity();
-        return identity.firstName && identity.lastName && identity.identificationDocumentId && identity.hashedIdentificationDocumentId ? true : false;
+        return identity.firstName && identity.lastName && identity.identificationDocumentId ? true : false;
     }
 }
 

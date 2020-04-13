@@ -16,14 +16,14 @@ import {
     Typography
 } from "@material-ui/core";
 
-import {TicketPayload, Address} from "../gen-backend-api/api";
+import {TicketResponseDto, Address} from "../gen-backend-api/api";
 
 export interface TicketViewProperties {
 
 }
 
 export interface ITicketStore {
-    ticket: TicketPayload;
+    ticket: TicketResponseDto;
     pdfUri: string;
     dataUri: string;
 }

@@ -1,6 +1,6 @@
-import React, {useReducer} from "react"
+import React, {useEffect, useState} from "react"
 import moment from "moment";
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
     Button,
     Card,
@@ -10,6 +10,7 @@ import {
     FormHelperText,
     Input,
     InputLabel,
+    TextField,
     Select,
     Typography,
 } from '@material-ui/core';
@@ -17,18 +18,18 @@ import {
 import Grid from '@material-ui/core/Grid';
 import MomentUtils from '@date-io/moment';
 import {DateTimePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
+
 import Header from "../components/Header";
+import IdentityProvider from "../service/identityProvider";
 import MenuItem from "@material-ui/core/MenuItem";
-import {TicketPayload} from '../gen-backend-api/api';
+import { TicketRequestDto } from '../gen-backend-api/api';
 import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SnoozeIcon from "@material-ui/icons/Snooze";
 import AlarmIcon from "@material-ui/icons/AddAlarm";
+import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import TicketFacade from "../service/TicketFacade";
-import TicketHelper from "../service/TicketHelper";
 import {useHistory} from 'react-router-dom';
-import {TicketCreateActionType, TicketCreateReducer, TicketCreationActionBuilder} from "../reducer/TicketCreateReducer";
-
 export interface LeaveRequestViewProperties {
 
 }
@@ -49,24 +50,62 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProperties) => {
+const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewProperties) => {
     const classes = useStyles();
     const history = useHistory();
 
-    const [{payload: ticketPayload}, dispatch] = useReducer(TicketCreateReducer, {
-        isFormReady: false,
-        payload: TicketHelper.emptyTicketPayload()
-    });
+    const [ticketPayload, setTicketPayload] = useState<T>({
+        // startAddress: { street: "bla" },
+        // endAddress: { street: "blub" },
+        // validFromDateTime: new Date(),
+        // validToDateTime: moment(new Date().getTime()).add(4, 'hours').toDate(),
+        // reason: 'sports'
+    } as T);
 
+    useEffect(() => {
+        setTicketPayload({...ticketPayload, validFromDateTime: new Date().getTime()} as T);
+    }, [])
 
     const handleClick = async () => {
+
+        ticketPayload.passportId = IdentityProvider.getIdentity().identificationDocumentId
+
         const response = await TicketFacade.createTicket(ticketPayload);
-        console.log('sending to backend => ', response);
+        console.log('sending to backend => ',response);
+
         if (response.status === 200 || response.status === 201) {
             history.push('details');
         } else {
             // TODO: show error TOAST
         }
+
+    }
+
+    const onReasonChange = ({target}: React.ChangeEvent<{ value: unknown }>): void => {
+        setTicketPayload({...ticketPayload, reason: target.value} as T);
+    }
+
+    const onEmployerCodeChange = ({target}: React.ChangeEvent<{ value: unknown }>): void => {
+        setTicketPayload({...ticketPayload, employerCode: target.value} as T);
+    }
+
+    const onAddressChange = (propertyName: string) => ({target}: React.ChangeEvent<HTMLInputElement>): void => {
+        setTicketPayload({...ticketPayload, [propertyName]: {street: target.value}} as T)
+    }
+
+    const onDateChange = (date: MaterialUiPickersDate): void => {
+        if (!date) {
+            return;
+        }
+        setTicketPayload({...ticketPayload, validFromDateTime: date.toDate()} as T);
+    }
+
+    const onDurationChange = ({target}: React.ChangeEvent<HTMLInputElement>): void => {
+        if (!ticketPayload?.validFromDateTime) {
+            return;
+        }
+        const validToDateTime = moment(ticketPayload.validFromDateTime.getTime()).add(target.value, 'hours');
+        setTicketPayload({...ticketPayload, validToDateTime: validToDateTime.toDate()})
     }
 
     const isWorkTicket = (): boolean | undefined => {
@@ -75,7 +114,7 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
 
     return (
         <div>
-            <Header title="Neuer Passierschein"/>
+            <Header title="Neuer Passierschein"></Header>
             <Container>
                 <Card className={classes.cards}>
                     <CardContent>
@@ -87,27 +126,25 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
                         </Typography>
                         <FormControl fullWidth={true}>
                             <InputLabel htmlFor='requestReason'>Grund</InputLabel>
-                            <Select id="requestReason" value={ticketPayload?.reason}
-                                    onChange={(e) => dispatch(TicketCreationActionBuilder.changeReason(String(e.target.value)))}>
+                            <Select id="requestReason" value={ticketPayload?.reason} onChange={onReasonChange}>
                                 <MenuItem value={'work'}>Arbeiten</MenuItem>
                                 <MenuItem value={'food'}>Einkaufen</MenuItem>
                                 <MenuItem value={'health'}>Arzt</MenuItem>
                                 <MenuItem value={'help'}>Hilfeleistung für Mitbürger</MenuItem>
                                 <MenuItem value={'recreation'}>Spazieren</MenuItem>
-                                <MenuItem value={'recreation'}>Joggen</MenuItem>
+                                <MenuItem value={'sports'}>Joggen</MenuItem>
                             </Select>
                             <FormHelperText id="requestReasonHelper">Wähle einen Grund aus.</FormHelperText>
                         </FormControl>
                         {isWorkTicket() &&
                         <div>
-                          <FormControl fullWidth={true}>
-                            <InputLabel htmlFor="requestStartAddress">Arbeitgeber-Bescheinigung-Code</InputLabel>
-                            <Input name="requestStartAddress"
-                                   onChange={(e) => dispatch(TicketCreationActionBuilder.changeEmployerCode(String(e.target.value)))}
-                                   aria-describedby="requestStartAddressHelper"/>
-                            <FormHelperText id="requestStartAddressHelper">Bescheinigung-Code des
-                              Arbeitgebers.</FormHelperText>
-                          </FormControl>
+                            <FormControl fullWidth={true}>
+                                <InputLabel htmlFor="requestStartAddress">Arbeitgeber-Bescheinigung-Code</InputLabel>
+                                <Input name="requestStartAddress" onChange={onEmployerCodeChange}
+                                       aria-describedby="requestStartAddressHelper"/>
+                                <FormHelperText id="requestStartAddressHelper">Bescheinigung-Code des
+                                    Arbeitgebers.</FormHelperText>
+                            </FormControl>
                         </div>
                         }
                     </CardContent>
@@ -120,16 +157,14 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
                         </Typography>
                         <FormControl fullWidth={true}>
                             <InputLabel htmlFor="requestStartAddress">Start Adresse</InputLabel>
-                            <Input name="requestStartAddress"
-                                   onChange={(e) => dispatch(TicketCreationActionBuilder.changePosition(TicketCreateActionType.CHANGE_START_POSITION, String(e.target.value)))}
+                            <Input name="requestStartAddress" onChange={onAddressChange('startAddress')} value={ticketPayload?.startAddress?.street}
                                    aria-describedby="requestStartAddressHelper"/>
                             <FormHelperText id="requestStartAddressHelper">Die Anschrift deines
                                 Ausgangspunkt.</FormHelperText>
                         </FormControl>
                         <FormControl fullWidth={true}>
                             <InputLabel htmlFor="requestTargetAddress">Ziel Adresse</InputLabel>
-                            <Input name="requestTargetAddress"
-                                   onChange={(e) => dispatch(TicketCreationActionBuilder.changePosition(TicketCreateActionType.CHANGE_FINISH_POSITION, String(e.target.value)))}
+                            <Input name="requestTargetAddress" onChange={onAddressChange('endAddress')}
                                    id="requestTargetAddress" aria-describedby="requestTargetAddressHelper"/>
                             <FormHelperText id="requestTargetAddressHelper">Die Anschrift deines Ziels.</FormHelperText>
                         </FormControl>
@@ -149,8 +184,8 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
                                     disablePast
                                     hideTabs
                                     ampm={false}
-                                    value={ticketPayload?.leaveTime}
-                                    onChange={(e) => dispatch(TicketCreationActionBuilder.changeTime(e))}
+                                    value={ticketPayload?.validFromDateTime}
+                                    onChange={onDateChange}
                                     allowKeyboardControl={false}
                                     helperText="Hardcoded helper text"
                                     leftArrowIcon={<AlarmIcon/>}
@@ -174,7 +209,7 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
                         <FormControl fullWidth={true}>
                             <InputLabel htmlFor="requestDuration">Dauer</InputLabel>
                             <Input name="requestDuration" id="requestDuration"
-                                   onChange={(e) => dispatch(TicketCreationActionBuilder.changeDuration(Number(e.target.value)))}
+                                   onChange={onDurationChange}
                                    aria-describedby="requestDurationHelper"/>
                             <FormHelperText id="requestDurationHelper">Wieviele Stunden wirst du bis zur Rückkehr
                                 benötigen?</FormHelperText>
@@ -183,10 +218,10 @@ const LeaveRequestView = <T extends TicketPayload>(props: LeaveRequestViewProper
                     </CardContent>
                 </Card>
 
-                <FormControl margin="normal" fullWidth={true}>
-                    <Button variant="contained" onClick={handleClick}>Ticket erstellen</Button>
-                </FormControl>
-            </Container>
+            <FormControl margin="normal" fullWidth={true}>
+                <Button variant="contained" onClick={handleClick}>Ticket erstellen</Button>
+            </FormControl>
+        </Container>
         </div>
     );
 };
