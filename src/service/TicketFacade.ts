@@ -1,13 +1,13 @@
 import {AxiosPromise} from 'axios';
 import {Configuration, ConfigurationParameters} from "../gen-backend-api/configuration";
 import WindowConfig from "./WindowConfig";
-import {TicketPayload, TicketRequest, DefaultApi} from "../gen-backend-api/api";
+import {TicketResponseDto, TicketRequestDto, TicketApi} from "../gen-backend-api/api";
 
 
-class TicketFacadeImpl <T extends TicketPayload>{
+class TicketFacadeImpl <T extends TicketRequestDto>{
     static instance: TicketFacadeImpl<any>;
     private config: Configuration = new Configuration({basePath: WindowConfig.BACKEND_URL} as ConfigurationParameters);
-    private api: DefaultApi = new DefaultApi(this.config);
+    private api: TicketApi = new TicketApi(this.config);
 
 
     constructor() {
@@ -17,16 +17,8 @@ class TicketFacadeImpl <T extends TicketPayload>{
         TicketFacadeImpl.instance = this;
     }
 
-    createTicket(ticketPayload: T): AxiosPromise<TicketRequest> {
-        return this.api.addTicketRequest(ticketPayload);
-    }
-
-    getAllTickets(id: number, pin: number) {
-        return this.api.getTicketRequest(id, pin);
-    }
-
-    getAllByPin(pin: number, hash: string) {
-        return this.api.findTicketRequestsByPin(pin, hash);
+    createTicket(ticketPayload: T): AxiosPromise<TicketResponseDto> {
+        return this.api.ticketsControllerCreateTicket(ticketPayload);
     }
 
 }

@@ -1,28 +1,26 @@
-import {Address, TicketPayload} from "../gen-backend-api/api";
+import {Address, TicketRequestDto} from "../gen-backend-api/api";
 import IdentityProvider from "./identityProvider";
 
 const TicketHelper = {
 
-    emptyAddress: (): Address => {
+    emptyAddress: (value: string): Address => {
         return {
-            street: '',
-            houseNo: 0,
-            postalCode: ' ',
-            city: ' ',
-            province: ' ',
-            country: ' '
+            street: value || '',
+            houseNumber: '',
+            zipCode: '',
+            city: '',
+            country: ''
         } as Address
     },
-    emptyTicketPayload: <T extends TicketPayload>(): T => {
+    emptyTicketPayload: (): TicketRequestDto => {
         return {
-            hashIdentityNumber: IdentityProvider.getIdentity().hashedIdentificationDocumentId,
-            reason: '',
-            leaveTime: new Date(),
-            startPosition: TicketHelper.emptyAddress(),
-            finishPosition: TicketHelper.emptyAddress(),
-            signature: '',
-            userPin: 0
-        } as T
+            passportId: IdentityProvider.getIdentity().identificationDocumentId,
+            reason: 'sports',
+            startAddress: TicketHelper.emptyAddress('blub'),
+            endAddress: TicketHelper.emptyAddress('bla'),
+            validFromDateTime: new Date(),
+            validToDateTime: new Date()
+        };
     },
 }
 
