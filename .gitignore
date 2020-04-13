@@ -25,3 +25,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# since we use yarn
+# lets ignore for now package-lock
+package-lock.json
