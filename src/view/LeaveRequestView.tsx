@@ -30,6 +30,7 @@ import AlarmIcon from "@material-ui/icons/AddAlarm";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import TicketFacade from "../service/TicketFacade";
 import {useHistory} from 'react-router-dom';
+import TicketStorage from "../service/ticketStorage";
 export interface LeaveRequestViewProperties {
 
 }
@@ -74,6 +75,12 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         console.log('sending to backend => ',response);
 
         if (response.status === 200 || response.status === 201) {
+            // FIXME: currently clear before
+            TicketStorage.clearTickets();
+
+            // save created ticket to LS
+            TicketStorage.addTicket(response.data);
+            // go to details to show it
             history.push('details');
         } else {
             // TODO: show error TOAST
@@ -128,11 +135,11 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
                             <InputLabel htmlFor='requestReason'>Grund</InputLabel>
                             <Select id="requestReason" value={ticketPayload?.reason} onChange={onReasonChange}>
                                 <MenuItem value={'work'}>Arbeiten</MenuItem>
-                                <MenuItem value={'food'}>Einkaufen</MenuItem>
+                                <MenuItem value={'food'}>Lebensmittel Einkauf</MenuItem>
                                 <MenuItem value={'health'}>Arzt</MenuItem>
                                 <MenuItem value={'help'}>Hilfeleistung für Mitbürger</MenuItem>
                                 <MenuItem value={'recreation'}>Spazieren</MenuItem>
-                                <MenuItem value={'sports'}>Joggen</MenuItem>
+                                <MenuItem value={'jogging'}>Joggen</MenuItem>
                             </Select>
                             <FormHelperText id="requestReasonHelper">Wähle einen Grund aus.</FormHelperText>
                         </FormControl>
