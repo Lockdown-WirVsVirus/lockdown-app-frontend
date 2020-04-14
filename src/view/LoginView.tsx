@@ -1,6 +1,4 @@
 import React, {useState} from "react";
-import SHA256 from "crypto-js/sha256";
-import Cookies from "universal-cookie";
 import Header from "../components/Header";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {
@@ -37,10 +35,6 @@ const LoginView = () => {
     const [loginState, setLoginState] = useState<UserIdentity>({} as UserIdentity);
 
     const sendLogin = () => {
-        const cookies = new Cookies();
-        cookies.set('firstname', loginState.firstname);
-        cookies.set('lastname', loginState.lastname);
-        cookies.set('personalid', loginState.personalId);
         IdentityProvider.setIdentity(loginState.firstname, loginState.lastname, loginState.personalId);
     }
 
