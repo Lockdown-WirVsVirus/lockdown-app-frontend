@@ -16,7 +16,7 @@ FROM nginx:1.12-alpine
 ARG BACKEND_URL
 COPY --from=build-stage /app/build /usr/share/nginx/html
 COPY --from=build-stage /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build-stage /app/docker/docker-starter.sh /app/docker/create_config.sh /
+COPY --from=build-stage /app/docker/docker-starter.sh /
 
 EXPOSE 80
 CMD ["/docker-starter.sh"]

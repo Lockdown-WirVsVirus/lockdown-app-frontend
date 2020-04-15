@@ -1,5 +1,5 @@
 const WindowConfig = {
-    BACKEND_URL: window.BACKEND_URL
+    BACKEND_URL: process.env.REACT_APP_BACKEND_URL
 }
 
 export default WindowConfig

@@ -11,6 +11,8 @@ class TicketFacadeImpl <T extends TicketRequestDto>{
 
 
     constructor() {
+        console.log('TicketFacade using BACKEND_URL: ', WindowConfig.BACKEND_URL);
+
         if (TicketFacadeImpl.instance) {
             return TicketFacadeImpl.instance;
         }
