@@ -4,7 +4,8 @@
 
 **.env.local**
 
-    REACT_APP_BACKEND_URL=http://localhost:4200/api/v1
+    # /api/v1 will be added automatically via TicketFacade
+    REACT_APP_BACKEND_URL=http://localhost:4200
 
 ## Available Scripts
 
