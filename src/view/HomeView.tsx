@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Cookies from 'universal-cookie';
 
-import Header from "./Components/Header";
+import Header from "../components/Header";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {
     Container,
@@ -104,7 +104,8 @@ const HomeView = (props: TicketViewProperties) => {
                             <br/>
                             <br/>
                             <Typography className={classes.time} color="textPrimary" gutterBottom>
-                                { ticket.ticket.leaveTime.getHours() || '14 - 16 Uhr'}
+                                { ticket.ticket.validFromDateTime.getHours().toString() || '14'}
+                                { ticket.ticket.validToDateTime.getHours().toString() || '16 Uhr'}
                             </Typography>
                             <br/>
                             <Typography className={classes.reason} color="textPrimary" gutterBottom>

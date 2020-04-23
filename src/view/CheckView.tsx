@@ -1,22 +1,14 @@
 import React, { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { TicketPayload, Address } from "../gen-backend-api/api";
+import { TicketRequestDto, Address } from "../gen-backend-api/api";
 import TicketFacade from "../service/TicketFacade";
 import axios from "axios";
 import { Document, pdfjs, Page } from "react-pdf";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Header from "./Components/Header";
+import Header from "../components/Header";
 import {
-  Container,
-  FormControl,
-  Input,
-  InputLabel,
-  FormHelperText,
-  TextField,
-  Button,
   Card,
   CardContent,
-  Typography
 } from "@material-ui/core";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -38,11 +30,11 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface CheckViewProperties {}
 
 const CheckView = (props: CheckViewProperties) => {
-  const cookies = new Cookies();
   const classes = useStyles();
 
   useEffect(() => {
-    const payload: TicketPayload = ({
+    // const payload: TicketPayload = ({
+    const payload: any = ({
       arrivalTime: new Date().getTime(),
       finishPosition: {} as Address,
       hashIdentityNumber: "234234234",
@@ -51,7 +43,7 @@ const CheckView = (props: CheckViewProperties) => {
       signature: "wrwerwer",
       startPosition: {} as Address,
       userPin: 1232
-    } as unknown) as TicketPayload;
+    } as unknown) as TicketRequestDto;
     TicketFacade.createTicket(payload)
       .then(result => {
         console.log(result);
@@ -63,7 +55,7 @@ const CheckView = (props: CheckViewProperties) => {
   return (
     <div>
       <Header title="Ticket-View" />
-      
+
         <Card className={classes.cards}>
           <CardContent>
             <Document
@@ -76,7 +68,7 @@ const CheckView = (props: CheckViewProperties) => {
             </Document>
           </CardContent>
         </Card>
-     
+
     </div>
   );
 };

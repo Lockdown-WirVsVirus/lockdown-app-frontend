@@ -1,25 +1,20 @@
 import React, { useState } from "react";
-import SHA256 from "crypto-js/sha256";
-import Cookies from "universal-cookie";
-import Header from "./Components/Header";
+import Header from "../components/Header";
 import Grid from "@material-ui/core/Grid";
-import CardMedia from "@material-ui/core/CardMedia";
-import Paper from "@material-ui/core/Paper";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   Container,
-  FormControl,
-  Input,
-  InputLabel,
-  FormHelperText,
-  TextField,
-  Button,
   Card,
   CardContent,
   Typography
 } from "@material-ui/core";
+import { TicketResponseDto, Address } from '../gen-backend-api/api';
+import QRCode from 'qrcode.react';
+import moment from "moment";
 
 import IdentityProvider from "../service/identityProvider";
+import TicketStorage from "../service/ticketStorage";
+import TicketHelper from "../service/TicketHelper";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,11 +23,29 @@ const useStyles = makeStyles(theme => ({
   paper: {
     textAlign: "left"
   },
+  barcode: {
+    marginBottom: "1.5em",
+  }
 
 }));
 
 const TicketDetailsView = () => {
   const classes = useStyles();
+
+  const ticket = TicketStorage.getInterestingTicket();
+  const [ticketPayload, setTicketPayload] = useState<TicketResponseDto>(ticket as TicketResponseDto);
+
+  const renderAddress = (address: Address) => {
+    return address && (
+      <div>
+      {
+      address.street || '' + " " + address.houseNumber || '' + ", " +
+      address.zipCode || '' + " " + address.city || ''
+      }
+      </div>
+    );
+  }
+
   return (
     <div>
       <Header title="Ticket Details" />
@@ -43,21 +56,23 @@ const TicketDetailsView = () => {
             <Grid container spacing={0}>
               <Grid item xs={12}>
                 <Typography className={classes.paper} variant="h6">
-                  <b>Hamburg</b>
+                  <b>{ ticketPayload?.startAddress?.city }</b>
                 </Typography>
               </Grid>
               <Grid item xs={12}>
                 <Typography className={classes.paper} variant="h5">
-                  <b>Lebensmittel</b>
+                  <b>{ TicketHelper.mapReasonToGerman(ticketPayload?.reason) }</b>
                 </Typography>
               </Grid>
             </Grid>
 
-            <Grid container direction="column" alignItems="center" justify="center">
-              <Grid item xs={12} >
-                <img src="/qr/chart.png"/>
+            { ticketPayload?.ticketId &&
+              <Grid container direction="column" alignItems="center" justify="center" className={classes.barcode}>
+                <Grid item xs={12} >
+                    <QRCode value={ticketPayload.ticketId} level="M" />
+                </Grid>
               </Grid>
-            </Grid>
+            }
 
             <Grid container spacing={0}>
               <Grid item xs={6}>
@@ -66,8 +81,8 @@ const TicketDetailsView = () => {
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                  23.März.2020
                 <Typography className={classes.paper} variant="h5">
+                  { ticketPayload?.validFromDateTime ? moment(ticketPayload.validFromDateTime).format('DD.MM.YYYY') : '' }
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -77,10 +92,38 @@ const TicketDetailsView = () => {
               </Grid>
               <Grid item xs={6}>
                 <Typography className={classes.paper} variant="h5">
-                  14:15-16:00
+                { ticketPayload?.validFromDateTime && ticketPayload?.validToDateTime ?
+                  moment(ticketPayload.validFromDateTime).format('hh:mm') + " - " + moment(ticketPayload.validToDateTime).format('hh:mm') : '' }
                 </Typography>
               </Grid>
             </Grid>
+
+            <hr></hr>
+
+            <Grid container spacing={0}>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h6">
+                  <b>Start Ort</b>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h5">
+                  { renderAddress(ticketPayload?.startAddress) }
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h6">
+                  <b>Ziel Ort</b>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className={classes.paper} variant="h5">
+                { renderAddress(ticketPayload?.endAddress) }
+                </Typography>
+              </Grid>
+            </Grid>
+
+            <hr></hr>
 
             <Grid container spacing={0}>
               <Grid item xs={6}>
@@ -96,7 +139,7 @@ const TicketDetailsView = () => {
               </Grid>
               <Grid item xs={6}>
                 <Typography className={classes.paper} variant="h5">
-                  <b>Ausweis-ID</b>
+                  <b>Ausweis Nummer</b>
                 </Typography>
               </Grid>
               <Grid item xs={6}>

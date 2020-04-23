@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Cookies from 'universal-cookie';
 
-import Header from "./Components/Header";
+import Header from "../components/Header";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {
     Container,
@@ -16,14 +16,14 @@ import {
     Typography
 } from "@material-ui/core";
 
-import {TicketPayload, Address} from "../gen-backend-api/api";
+import {TicketResponseDto, Address} from "../gen-backend-api/api";
 
 export interface TicketViewProperties {
 
 }
 
 export interface ITicketStore {
-    ticket: TicketPayload;
+    ticket: TicketResponseDto;
     pdfUri: string;
     dataUri: string;
 }

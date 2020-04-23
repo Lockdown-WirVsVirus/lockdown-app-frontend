@@ -1,15 +1,11 @@
 import React, {useState} from "react";
-import SHA256 from "crypto-js/sha256";
-import Cookies from "universal-cookie";
-import Header from "./Components/Header";
+import Header from "../components/Header";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {
     Container,
     FormControl,
     Input,
     InputLabel,
-    FormHelperText,
-    TextField,
     Button,
     Card,
     CardContent,
@@ -18,8 +14,6 @@ import {
 
 import IdentityProvider from "../service/identityProvider";
 import {UserIdentity} from "../model/UserIdentity";
-
-const salt = "234lsnfd";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -41,13 +35,7 @@ const LoginView = () => {
     const [loginState, setLoginState] = useState<UserIdentity>({} as UserIdentity);
 
     const sendLogin = () => {
-        const hashed = SHA256(salt + loginState.personalId).toString();
-        const cookies = new Cookies();
-        cookies.set('firstname', loginState.firstname);
-        cookies.set('lastname', loginState.lastname);
-        cookies.set('personalid', loginState.personalId);
-        cookies.set('hashPersonalID', hashed);
-        IdentityProvider.setIdentity(loginState.firstname, loginState.lastname, loginState.personalId, hashed);
+        IdentityProvider.setIdentity(loginState.firstname, loginState.lastname, loginState.personalId);
     }
 
     const onChange = (fieldName: string) => ({target}: React.ChangeEvent<HTMLInputElement>) => {
