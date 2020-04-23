@@ -30,7 +30,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "secure-ls": "^1.2.6",
-    "typescript": "~3.7.2",
+    "typescript": "~3.8.3",
     "universal-cookie": "^4.0.3"
   },
   "scripts": {
