@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import {
+  Button,
   Container,
   Card,
   CardContent,
   Typography
 } from "@material-ui/core";
-import { TicketResponseDto, Address } from '../gen-backend-api/api';
+import { TicketResponseDto, Address } from '../../gen-backend-api/api';
 import QRCode from 'qrcode.react';
 import moment from "moment";
 
-import IdentityProvider from "../service/identityProvider";
-import TicketStorage from "../service/ticketStorage";
-import TicketHelper from "../service/TicketHelper";
+import IdentityProvider from "../../service/identityProvider";
+import TicketStorage from "../../service/ticketStorage";
+import TicketHelper from "../../service/TicketHelper";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -150,6 +151,10 @@ const TicketDetailsView = () => {
             </Grid>
           </CardContent>
         </Card>
+
+        <br/>
+
+        <Button variant="contained" href="home">Zurück zur Übersicht</Button>
       </Container>
     </div>
   );
