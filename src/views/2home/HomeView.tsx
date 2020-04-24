@@ -1,172 +1,147 @@
-import React, {useState} from "react";
-import Cookies from 'universal-cookie';
-
-import Header from "../components/Header";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import React, { useState } from "react";
+import {useHistory} from 'react-router-dom';
+import Header from "../../components/Header";
+import AddIcon from '@material-ui/icons/Add';
+import { makeStyles } from "@material-ui/core/styles";
 import {
+    Fab,
     Container,
-    FormControl,
-    Input,
-    InputLabel,
-    FormHelperText,
-    TextField,
-    Button,
     Card,
     CardContent,
-    Typography
+    Tabs, Tab,
+    Typography,
+    Box,
+    Button
 } from "@material-ui/core";
+import { TicketResponseDto } from '../../gen-backend-api/api';
+import moment from "moment";
 
-import {ITicketStore} from './TicketView';
+import IdentityProvider from "../../service/identityProvider";
+import TicketStorage from "../../service/ticketStorage";
+import TicketPreview from "./components/TicketPreview";
 
-export interface TicketViewProperties {
+const useStyles = makeStyles(theme => ({
+    cardContent: {
+        padding: 0,
+    },
+    noActiveTicket: {
+        padding: '12px',
+    },
+    fab: {
+        position: 'absolute',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
+    },
+}));
 
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: any;
+    value: any;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-
-            "background-color": "#F9F9F9",
-        },
-        headline: {
-            "text-align": 'center',
-            color: 'white',
-            "margin-bottom": '40px',
-        },
-        homeContainer: {
-            top: '0px',
-            "padding-left": 0,
-            "padding-right": 0,
-        },
-        homeContainer2: {
-            top: '0px',
-            "min-height": "300px",
-        },
-        time: {
-            "font-weight": "bold",
-        },
-        reason: {
-            "font-weight": "bold",
-        },
-        homeHeader: {
-            background: "rgba(0,75,118,1)",
-        },
-        noTickets: {
-            "min-width": '300px',
-            "text-align": "center",
-            "margin": 'auto',
-            height: "200px",
-            color: "white"
-        },
-        ticketCard: {
-            "min-width": '300px',
-            "margin": 'auto'
-        },
-        ticketCardContent: {
-            "text-align": "center",
-        },
-        newsCard: {
-            "min-width": '300px',
-            "margin": 'auto'
-        },
-        newsCardContent: {
-            "text-align": "center",
-        }
-    })
-);
-
-const getTicketFromLocalStorage = (): ITicketStore | null => {
-    const itemString = window.localStorage.getItem('ticket');
-    if (itemString) {
-        const item = JSON.parse(itemString);
-        return item as ITicketStore;
-    } else {
-        return null;
-    }
-}
-
-const HomeView = (props: TicketViewProperties) => {
-    const classes = useStyles();
-
-    const [ticket, setTicket] = useState<ITicketStore | null>(
-        getTicketFromLocalStorage()
-    );
-
-    let ticketCard;
-    if (ticket) {
-        // TODO: echte Werte aus dem gespeicherten Ticket
-        // TODO: get Hours from Date Objekt.
-        ticketCard = <Card className={classes.ticketCard}>
-                        <CardContent className={classes.ticketCardContent}>
-                            <Typography color="textSecondary" gutterBottom>
-                                Aktuelles Ticket
-                            </Typography>
-                            <br/>
-                            <br/>
-                            <Typography className={classes.time} color="textPrimary" gutterBottom>
-                                { ticket.ticket.validFromDateTime.getHours().toString() || '14'}
-                                { ticket.ticket.validToDateTime.getHours().toString() || '16 Uhr'}
-                            </Typography>
-                            <br/>
-                            <Typography className={classes.reason} color="textPrimary" gutterBottom>
-                                { ticket.ticket.reason || 'Arztbesuch'}
-                            </Typography>
-                            <br/>
-                            <Button href="/ticket">Öffnen</Button>
-                        </CardContent>
-                    </Card>
-    } else {
-        ticketCard = <div className={classes.noTickets}>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        Aktuell keine Passierscheine vorhanden
-                     </div>
-    }
+function TabPanel(props: TabPanelProps) {
+    const { children, value, index, ...other } = props;
 
     return (
-        <div className={classes.root}>
-            <Container className={classes.homeContainer}>
-                <Card>
-                    <CardContent className={classes.homeHeader}>
-                        <Typography className={classes.headline} color="textPrimary" gutterBottom>
-                            Safe<b>Ticket</b>
-                        </Typography>
-                        {ticketCard}
-                    </CardContent>
-                </Card>
-            </Container>
-            <Container className={classes.homeContainer2}>
-                <br/>
-                <br/>
-                <br/>
-                <Button variant="outlined" fullWidth={true} color="primary" href="/leave">Neuen Passierschein</Button>
-
-                <br/>
-                <br/>
-                <br/>
-
-                <Typography color="textPrimary" gutterBottom>
-                    <h3>Neuigkeiten für deine Region</h3>
-                </Typography>
-                <br/>
-                <Card className={classes.newsCard}>
-                    <CardContent className={classes.newsCardContent}>
-                        <Typography color="textSecondary" gutterBottom>
-                            22.03.2020
-                        </Typography>
-                        <br/>
-                        <Typography className={classes.reason} color="textPrimary" gutterBottom>
-                            Keine Neuigkeiten
-                        </Typography>
-                    </CardContent>
-                </Card>
-            </Container>
-        </div>
+      <Typography
+        component="div"
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && children}
+      </Typography>
     );
+}
+
+
+
+const TicketDetailsView = () => {
+  const classes = useStyles();
+  const history = useHistory();
+
+  const goToCreate = () => {
+    history.push("create")
+  }
+
+  const ticket = TicketStorage.getInterestingTicket();
+  const [ticketPayload, setTicketPayload] = useState<TicketResponseDto>(ticket as TicketResponseDto);
+
+  const [tabValue, setTabValue] = React.useState(0);
+
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setTabValue(newValue);
+  };
+
+  const doLogout = () => {
+      IdentityProvider.logout();
+      history.replace("login");
+  }
+
+  const dummyTicket: TicketResponseDto = {
+    reason: "medical",
+    ticketId: "34314-2312-34231",
+    hashedPassportId: "",
+    validFromDateTime: moment().toDate(),
+    validToDateTime: moment().add(4, 'hours').toDate(),
+    startAddress: { street: 'Glückstr.', houseNumber: '2a', zipCode: '70771', city: 'Stuttgart', country: 'Deutschland' },
+    endAddress: { street: 'Glückstr.', houseNumber: '2a', zipCode: '70771', city: 'Stuttgart', country: 'Deutschland' },
+    ticketStatus: {},
+  }
+
+  const activeTickets = TicketStorage.getActiveTickets();
+  const pastTickets = TicketStorage.getTicketsInPast(7);
+
+  return (
+    <div>
+      <Header title="Tickets" />
+        <Container>
+            <Card>
+                <CardContent className={classes.cardContent}>
+                    <Tabs
+                        value={tabValue}
+                        onChange={handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="fullWidth"
+                        centered
+                    >
+                        <Tab label="Aktiv" />
+                        <Tab label="Abgelaufen" />
+                    </Tabs>
+                    <TabPanel value={tabValue} index={0}>
+                        { activeTickets && activeTickets.length > 0 ?
+                            activeTickets.map(ticket => <TicketPreview ticket={ticket} />)
+                            : <Box className={classes.noActiveTicket} component="div">
+                                Kein aktives Ticket vorhanden. Erstelle ein Ticket.
+                            </Box>
+                        }
+                    </TabPanel>
+                    <TabPanel value={tabValue} index={1}>
+                        { pastTickets && pastTickets.length > 0 ?
+                            pastTickets.map(ticket => <TicketPreview ticket={ticket} />)
+                            : <Box className={classes.noActiveTicket} component="div">
+                                Keine abgelaufenen Ticket vorhanden.
+                            </Box>
+                        }
+                    </TabPanel>
+                </CardContent>
+            </Card>
+
+            <br/>
+
+            <Button variant="contained" onClick={doLogout} fullWidth={true}>Ausloggen</Button>
+
+        </Container>
+
+        <Fab color="primary" aria-label="add" size="large" className={classes.fab} onClick={goToCreate}>
+            <AddIcon />
+        </Fab>
+    </div>
+  );
 };
 
-
-export default HomeView
+export default TicketDetailsView;
