@@ -19,18 +19,18 @@ import Grid from '@material-ui/core/Grid';
 import MomentUtils from '@date-io/moment';
 import {DateTimePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 
-import Header from "../components/Header";
-import IdentityProvider from "../service/identityProvider";
+import Header from "../../components/Header";
+import IdentityProvider from "../../service/identityProvider";
 import MenuItem from "@material-ui/core/MenuItem";
-import { TicketRequestDto } from '../gen-backend-api/api';
+import { TicketRequestDto } from '../../gen-backend-api/api';
 import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SnoozeIcon from "@material-ui/icons/Snooze";
 import AlarmIcon from "@material-ui/icons/AddAlarm";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
-import TicketFacade from "../service/TicketFacade";
+import TicketFacade from "../../service/TicketFacade";
 import {useHistory} from 'react-router-dom';
-import TicketStorage from "../service/ticketStorage";
+import TicketStorage from "../../service/ticketStorage";
 export interface LeaveRequestViewProperties {
 
 }
