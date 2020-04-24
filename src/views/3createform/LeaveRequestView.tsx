@@ -75,9 +75,6 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         console.log('sending to backend => ',response);
 
         if (response.status === 200 || response.status === 201) {
-            // FIXME: currently clear before
-            TicketStorage.clearTickets();
-
             // save created ticket to LS
             TicketStorage.addTicket(response.data);
             // go to details to show it
