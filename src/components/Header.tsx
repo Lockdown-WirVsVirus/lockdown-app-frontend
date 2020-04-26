@@ -102,16 +102,17 @@ const Header = (props: HeaderProps) => {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
+          {/* Menu Burger Button if isLoggedIn */}
           { IdentityProvider.isLoggedIn() &&
             <IconButton onClick={toggleDrawer(true)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
           }
+
           <Typography variant="h6" className={classes.typography}>
             {props.title || "Registrierung"}
           </Typography>
-          <Button onClick={doLogout} color="inherit">Logout</Button>
-          </Toolbar>
+        </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={drawerState} onClose={toggleDrawer(false)}>
         {list}
