@@ -12,8 +12,8 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
@@ -51,14 +51,9 @@ const Header = (props: HeaderProps) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+  const [drawerState, setDrawerState] = React.useState(false);
 
-  const toggleDrawer = (anchor: Anchor, open: boolean) => (
+  const toggleDrawer = (open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
   ) => {
     if (
@@ -69,7 +64,7 @@ const Header = (props: HeaderProps) => {
       return;
     }
 
-    setState({ ...state, [anchor]: open });
+    setDrawerState(open);
   };
 
   const doLogout = () => {
@@ -77,29 +72,28 @@ const Header = (props: HeaderProps) => {
     history.replace("login");
   }
 
-  const list = (anchor: Anchor) => (
+  const list = (
     <div
       className={classes.list}
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem button>
+          <ListItemIcon><AccountBoxIcon /></ListItemIcon>
+          <ListItemText primary="Profil" />
+        </ListItem>
+        <ListItem button>
+          <ListItemText primary="Sonstiges" />
+        </ListItem>
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem button>
+          <ListItemIcon><MeetingRoomIcon /></ListItemIcon>
+          <ListItemText primary="Ausloggen" onClick={doLogout} />
+        </ListItem>
       </List>
     </div>
   );
@@ -108,17 +102,19 @@ const Header = (props: HeaderProps) => {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <IconButton onClick={toggleDrawer('left', true)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          { IdentityProvider.isLoggedIn() &&
+            <IconButton onClick={toggleDrawer(true)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" className={classes.typography}>
-              {props.title || "Registrierung"}
-            </Typography>
-            <Button onClick={doLogout} color="inherit">Logout</Button>
+          }
+          <Typography variant="h6" className={classes.typography}>
+            {props.title || "Registrierung"}
+          </Typography>
+          <Button onClick={doLogout} color="inherit">Logout</Button>
           </Toolbar>
       </AppBar>
-      <Drawer anchor="left" open={state['left']} onClose={toggleDrawer('left', false)}>
-        {list("left")}
+      <Drawer anchor="left" open={drawerState} onClose={toggleDrawer(false)}>
+        {list}
       </Drawer>
     </div>
   );
