@@ -13,7 +13,7 @@ RUN yarn build
 
 # Stage 2 - the production environment
 FROM nginx:1.12-alpine
-ARG BACKEND_URL
+ARG REACT_APP_BACKEND_URL
 COPY --from=build-stage /app/build /usr/share/nginx/html
 COPY --from=build-stage /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /app/docker/docker-starter.sh /
