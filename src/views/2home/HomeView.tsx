@@ -76,11 +76,6 @@ const TicketDetailsView = () => {
     setTabValue(newValue);
   };
 
-  const doLogout = () => {
-      IdentityProvider.logout();
-      history.replace("login");
-  }
-
   const dummyTicket: TicketResponseDto = {
     reason: "medical",
     ticketId: "34314-2312-34231",
@@ -132,8 +127,6 @@ const TicketDetailsView = () => {
             </Card>
 
             <br/>
-
-            <Button variant="contained" onClick={doLogout} fullWidth={true}>Ausloggen</Button>
 
         </Container>
 
