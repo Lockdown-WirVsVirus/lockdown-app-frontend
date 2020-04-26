@@ -67,6 +67,11 @@ const Header = (props: HeaderProps) => {
     setDrawerState(open);
   };
 
+  const goTo = (where: string) =>
+    (event: React.MouseEvent) => {
+      history.push(where);
+    }
+
   const doLogout = () => {
     IdentityProvider.logout();
     history.replace("login");
@@ -80,12 +85,12 @@ const Header = (props: HeaderProps) => {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        <ListItem button>
+        <ListItem button onClick={goTo('home')}>
           <ListItemIcon><AccountBoxIcon /></ListItemIcon>
-          <ListItemText primary="Profil" />
+          <ListItemText primary="Übersicht" />
         </ListItem>
-        <ListItem button>
-          <ListItemText primary="Sonstiges" />
+        <ListItem button onClick={goTo('create')}>
+          <ListItemText primary="Neues Ticket" />
         </ListItem>
       </List>
       <Divider />
