@@ -1294,10 +1294,10 @@
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.3.3.tgz#85bc74ba782fb7aa3a514d11767832b0e3bc6803"
 
-"@types/crypto-js@^3.1.44":
-  version "3.1.44"
-  resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.44.tgz#3ad6f046b8c248866b9e5726ce8a1c09f73db9e0"
-  integrity sha512-WOoVHc3gv3zirPQ27BynaOUV9AvWrvPmSF/ZyAAABwb7KYn+iWrEpopW/M9gYMBfNdYHqzvu9AIggwWbt9mGYw==
+"@types/crypto-js@^3.1.45":
+  version "3.1.46"
+  resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.46.tgz#7469f88b6a574046d7e1265a4d043c57a2c61778"
+  integrity sha512-w1rUo6jY6dhNQXOl85UAvJHPX8pIqzfUH2E1+HxU3Z4HsuAaiYPkogEplJqD5QmtDtWC5MUkULtJEvpX5501xQ==
 
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
