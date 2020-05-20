@@ -39,7 +39,7 @@ jobs:
   # Dockerize and deploy
   # needs build-test
   docker-build-and-push:
-    needs: build-test
+    # needs: build-test
     name: Docker Build and Publish
     runs-on: ubuntu-latest
     steps:
