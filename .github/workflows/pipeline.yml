@@ -65,10 +65,9 @@ jobs:
         # via gcloud command-line tool.
         gcloud auth configure-docker
     # Push the Docker image to Google Container Registry
+    # by pushing the registry without tag we push all available tags
     - name: Publish
-      run: |
-        docker push eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_SHA} \
-        docker push eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_REF#refs/heads/}
+      run: docker push eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}
 
     # get cloud run name by branch
     - name: Set env to dev
