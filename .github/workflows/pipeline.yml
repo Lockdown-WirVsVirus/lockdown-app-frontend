@@ -27,26 +27,11 @@ jobs:
   #         npm run build
   #         npm run test
 
-  specific-branches:
-    needs: build-test
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: check branch develop
-      if: ${{ github.ref == 'refs/heads/develop' }}
-      run: |
-        echo "::set-env name=IS_DEVELOP::true"
-    - name: check branch master
-      if: ${{ github.ref == 'refs/heads/develop' }}
-      run: |
-        echo "::set-env name=IS_MASTER::true"
-
   # Dockerize and deploy
   # only if master or develop
   docker-build-and-push:
-    needs: specific-branches
-    if: ${{ ${IS_DEVELOP} || ${IS_MASTER} }}
+    needs: build-test
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/develop'
     name: Docker Build and Publish
     runs-on: ubuntu-latest
     steps:
