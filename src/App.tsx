@@ -8,7 +8,6 @@ import ShowLsPdfView from "./views/zarchive/ShowLsPdfView";
 import RenderLsPdfView from "./views/zarchive/RenderLsPdfView";
 import LeaveRequestView from "./views/3createform/LeaveRequestView";
 import TicketDetailsView from "./views/4ticket/TicketDetails"
-import TicketView from "./views/zarchive/TicketView";
 import HomeView from "./views/2home/HomeView";
 import {createBrowserHistory} from 'history';
 import moment from "moment";
@@ -27,9 +26,7 @@ function App() {
             <Route path="/login" component={LoginView}/>
             <Route path="/home" component={HomeView}/>
             <Route path="/create" component={LeaveRequestView}/>
-
-            <Route path="/ticket" component={TicketView}/>
-            <Route path="/details" component={TicketDetailsView}/>
+            <Route path="/ticket/:id" component={TicketDetailsView}/>
 
             {/* Debug / Develop Routes */}
             <Route path="/check" component={CheckView}/>

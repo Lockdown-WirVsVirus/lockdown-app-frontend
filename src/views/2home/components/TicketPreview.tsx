@@ -1,4 +1,5 @@
 import React from "react";
+import {useHistory} from 'react-router-dom';
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Box,
@@ -40,10 +41,17 @@ interface TicketPreviewProps {
 function TicketPreview(props: TicketPreviewProps) {
     const { ticket } = props;
 
+    const history = useHistory();
     const classes = useStyles();
 
+    const handleClick = (ticketId: string) => {
+        return () => {
+            history.push('/ticket/' + ticketId);
+        }
+    }
+
     return (
-        <Box className={classes.root} component="div">
+        <Box className={classes.root} component="div" onClick={handleClick(ticket.ticketId)}>
             <TableContainer className={classes.table}>
                 <Table aria-label="active tickets" size="small" >
                     <TableBody>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams, useHistory } from "react-router-dom";
 import Header from "../../components/Header";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -32,9 +33,19 @@ const useStyles = makeStyles(theme => ({
 
 const TicketDetailsView = () => {
   const classes = useStyles();
+  const history = useHistory();
 
-  const ticket = TicketStorage.getInterestingTicket();
+  let { id } = useParams();
+
+  // get ticket
+  const ticket = TicketStorage.getTicketById(id);
+
+  // ticket state and init with ticket from storage
   const [ticketPayload] = useState<TicketResponseDto>(ticket as TicketResponseDto);
+
+  const goHome = () => {
+    history.push('/home')
+  }
 
   const renderAddress = (address: Address) => {
     return address && (
@@ -94,7 +105,7 @@ const TicketDetailsView = () => {
               <Grid item xs={6}>
                 <Typography className={classes.paper} variant="h5">
                 { ticketPayload?.validFromDateTime && ticketPayload?.validToDateTime ?
-                  moment(ticketPayload.validFromDateTime).format('hh:mm') + " - " + moment(ticketPayload.validToDateTime).format('hh:mm') : '' }
+                  moment(ticketPayload.validFromDateTime).format('HH:mm') + " - " + moment(ticketPayload.validToDateTime).format('HH:mm') : '' }
                 </Typography>
               </Grid>
             </Grid>
@@ -154,7 +165,7 @@ const TicketDetailsView = () => {
 
         <br/>
 
-        <Button variant="contained" href="home">Zurück zur Übersicht</Button>
+        <Button variant="contained" onClick={goHome}>Zurück zur Übersicht</Button>
       </Container>
     </div>
   );
