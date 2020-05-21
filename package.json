@@ -52,7 +52,7 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "node_modules/(?!(@bundled-es-modules/pdfjs-dist)/"
+      "node_modules/(?!(@bundled-es-modules/pdfjs-dist))/"
     ]
   },
   "devDependencies": {
