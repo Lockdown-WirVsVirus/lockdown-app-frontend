@@ -34,14 +34,14 @@ const TicketDetailsView = () => {
   const classes = useStyles();
 
   const ticket = TicketStorage.getInterestingTicket();
-  const [ticketPayload, setTicketPayload] = useState<TicketResponseDto>(ticket as TicketResponseDto);
+  const [ticketPayload] = useState<TicketResponseDto>(ticket as TicketResponseDto);
 
   const renderAddress = (address: Address) => {
     return address && (
       <div>
       {
-      address.street || '' + " " + address.houseNumber || '' + ", " +
-      address.zipCode || '' + " " + address.city || ''
+      (address.street || '') + " " + (address.houseNumber || '') + ", " +
+      (address.zipCode || '') + " " + (address.city || '')
       }
       </div>
     );

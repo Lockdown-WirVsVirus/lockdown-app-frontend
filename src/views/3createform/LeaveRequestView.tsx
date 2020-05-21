@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, { useState } from "react"
 import moment from "moment";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
@@ -23,10 +23,6 @@ import Header from "../../components/Header";
 import IdentityProvider from "../../service/identityProvider";
 import MenuItem from "@material-ui/core/MenuItem";
 import { TicketRequestDto } from '../../gen-backend-api/api';
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import SnoozeIcon from "@material-ui/icons/Snooze";
-import AlarmIcon from "@material-ui/icons/AddAlarm";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import TicketFacade from "../../service/TicketFacade";
 import {useHistory} from 'react-router-dom';
@@ -77,10 +73,6 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         // ends next full hour + 2 hours
         validToTime: moment().add(3, "hour").minutes(0),
     });
-
-    useEffect(() => {
-        setTicketPayload({...ticketPayload, validFromDateTime: new Date().getTime()} as T);
-    }, [])
 
     const handleClick = async () => {
 

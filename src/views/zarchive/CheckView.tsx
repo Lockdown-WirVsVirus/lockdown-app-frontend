@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
-import Cookies from "universal-cookie";
 import { TicketRequestDto, Address } from "../../gen-backend-api/api";
 import TicketFacade from "../../service/TicketFacade";
-import axios from "axios";
 import { Document, pdfjs, Page } from "react-pdf";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Header from "../../components/Header";

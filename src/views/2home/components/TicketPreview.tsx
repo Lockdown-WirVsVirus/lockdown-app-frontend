@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Box,
-    Button,
     Table, TableBody, TableCell, TableContainer, TableRow
 } from "@material-ui/core";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -39,7 +38,7 @@ interface TicketPreviewProps {
 }
 
 function TicketPreview(props: TicketPreviewProps) {
-    const { ticket, ...other } = props;
+    const { ticket } = props;
 
     const classes = useStyles();
 

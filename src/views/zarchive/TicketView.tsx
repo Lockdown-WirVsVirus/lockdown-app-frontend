@@ -1,22 +1,14 @@
 import React, {useState} from "react";
-import Cookies from 'universal-cookie';
 
 import Header from "../../components/Header";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {
     Container,
-    FormControl,
-    Input,
-    InputLabel,
-    FormHelperText,
-    TextField,
-    Button,
     Card,
     CardContent,
-    Typography
 } from "@material-ui/core";
 
-import {TicketResponseDto, Address} from "../../gen-backend-api/api";
+import {TicketResponseDto} from "../../gen-backend-api/api";
 
 export interface TicketViewProperties {
 
@@ -52,7 +44,7 @@ const getTicketFromLocalStorage = () => {
 
 const TicketView = (props: TicketViewProperties) => {
     const classes = useStyles();
-    const [pdfUri, setPdfUri] = useState<string>(
+    const [pdfUri] = useState<string>(
         getTicketFromLocalStorage()
     );
 
@@ -62,7 +54,7 @@ const TicketView = (props: TicketViewProperties) => {
             <Container>
                 <Card className={classes.cards}>
                     <CardContent>
-                        <iframe className={classes.iframe} src={pdfUri}></iframe>
+                        <iframe title="pdf ticket view" className={classes.iframe} src={pdfUri}></iframe>
                     </CardContent>
                 </Card>
             </Container>

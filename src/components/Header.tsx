@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from 'react-router-dom';
 import { AppBar, Drawer, Toolbar, Typography } from "@material-ui/core";
-import { IconButton, Button } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import IdentityProvider from "../service/identityProvider";
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -14,8 +14,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 const useStyles = makeStyles(theme => ({
   root: {

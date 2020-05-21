@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {useHistory} from 'react-router-dom';
 import Header from "../../components/Header";
 import AddIcon from '@material-ui/icons/Add';
@@ -11,14 +11,10 @@ import {
     Tabs, Tab,
     Typography,
     Box,
-    Button
 } from "@material-ui/core";
-import { TicketResponseDto } from '../../gen-backend-api/api';
-import moment from "moment";
 
-import IdentityProvider from "../../service/identityProvider";
-import TicketStorage from "../../service/ticketStorage";
 import TicketPreview from "./components/TicketPreview";
+import TicketStorage from "../../service/ticketStorage";
 
 const useStyles = makeStyles(theme => ({
     cardContent: {
@@ -67,25 +63,11 @@ const TicketDetailsView = () => {
     history.push("create")
   }
 
-  const ticket = TicketStorage.getInterestingTicket();
-  const [ticketPayload, setTicketPayload] = useState<TicketResponseDto>(ticket as TicketResponseDto);
-
   const [tabValue, setTabValue] = React.useState(0);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleChange = (_: React.ChangeEvent<{}>, newValue: number) => {
     setTabValue(newValue);
   };
-
-  const dummyTicket: TicketResponseDto = {
-    reason: "medical",
-    ticketId: "34314-2312-34231",
-    hashedPassportId: "",
-    validFromDateTime: moment().toDate(),
-    validToDateTime: moment().add(4, 'hours').toDate(),
-    startAddress: { street: 'Glückstr.', houseNumber: '2a', zipCode: '70771', city: 'Stuttgart', country: 'Deutschland' },
-    endAddress: { street: 'Glückstr.', houseNumber: '2a', zipCode: '70771', city: 'Stuttgart', country: 'Deutschland' },
-    ticketStatus: {},
-  }
 
   const activeTickets = TicketStorage.getActiveTickets();
   const pastTickets = TicketStorage.getTicketsInPast(7);
