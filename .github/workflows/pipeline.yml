@@ -34,7 +34,7 @@ jobs:
   # only if branch = master or develop
   docker-build-and-push:
     needs: build-test
-    if: ${{ env.IS_DEVELOP || env.IS_MASTER }}
+    if: ${{ ${IS_DEVELOP} || ${IS_MASTER} }}
     name: Docker Build and Publish
     runs-on: ubuntu-latest
     steps:
