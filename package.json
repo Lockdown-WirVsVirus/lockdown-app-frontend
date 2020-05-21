@@ -21,7 +21,7 @@
     "crypto-js": "^4.0.0",
     "history": "^4.10.1",
     "moment": "^2.24.0",
-    "pdfjs-dist": "^2.2.228",
+    "pdfjs-dist": "^2.4.456",
     "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
