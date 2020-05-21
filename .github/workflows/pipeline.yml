@@ -37,10 +37,27 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    # env specific
+    - name: Set env to dev
+      if: github.ref == 'refs/heads/develop'
+      run: |
+        echo "::set-env name=CLOUD_RUN_NAME::dev-${{ secrets.GCLOUD_APP_NAME }}"
+        echo "::set-env name=REACT_APP_BACKEND_URL::https://dev-api.safeticketapp.de"
+    - name: Set env to production
+      if: github.ref == 'refs/heads/master'
+      run: |
+        echo "::set-env name=CLOUD_RUN_NAME::${{ secrets.GCLOUD_APP_NAME }}"
+        echo "::set-env name=REACT_APP_BACKEND_URL::https://api.safeticketapp.de"
+    - name: Echo Env Config
+      run: |
+        echo "CLOUD_RUN_NAME: $CLOUD_RUN_NAME"
+        echo "REACT_APP_BACKEND_URL: $REACT_APP_BACKEND_URL"
+
     # Build the Docker image
     - name: Build
       run: |
         docker build . \
+        -e REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL \
         --tag eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_SHA} \
         --tag eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_REF#refs/heads/}
 
@@ -60,16 +77,6 @@ jobs:
     # by pushing the registry without tag we push all available tags
     - name: Publish
       run: docker push eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}
-
-    # get cloud run name by branch
-    - name: Set env to dev
-      if: endsWith(github.ref, '/develop')
-      run: |
-        echo "::set-env name=CLOUD_RUN_NAME::dev-${{ secrets.GCLOUD_APP_NAME }}"
-    - name: Set env to production
-      if: endsWith(github.ref, '/master')
-      run: |
-        echo "::set-env name=CLOUD_RUN_NAME::${{ secrets.GCLOUD_APP_NAME }}"
 
     # Deploy image to Cloud Run
     - name: Deploy
