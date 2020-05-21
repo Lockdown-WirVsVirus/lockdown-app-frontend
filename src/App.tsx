@@ -27,15 +27,17 @@ function App() {
             <Route path="/login" component={LoginView}/>
             <Route path="/home" component={HomeView}/>
             <Route path="/create" component={LeaveRequestView}/>
-            <Route path="/ticket" component={TicketView}/>
 
+            <Route path="/ticket" component={TicketView}/>
+            <Route path="/details" component={TicketDetailsView}/>
+
+            {/* Debug / Develop Routes */}
             <Route path="/check" component={CheckView}/>
             <Route path="/download" component={DownloadPdfView}/>
             <Route path="/open" component={ShowLsPdfView}/>
             <Route path="/render" component={RenderLsPdfView}/>
             <Route path="/leave" component={LeaveRequestView}/>
 
-            <Route path="/details" component={TicketDetailsView}/>
         </Router>
     );
 }
