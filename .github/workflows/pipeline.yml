@@ -2,10 +2,6 @@ name: Docker Image CI
 
 on: ['push', 'pull_request']
 
-env:
-  IS_DEVELOP: ${{ github.ref == 'refs/heads/develop' }}
-  IS_MASTER: ${{ github.ref == 'refs/heads/master' }}
-
 jobs:
   # Build & Test Job
   build-test:
@@ -27,14 +23,14 @@ jobs:
           CI: true
       - run: |
           npm install
-  #         npm run build
-  #         npm run test
+          npm run build
+          npm run test
 
   # Dockerize and deploy
   # only if branch = master or develop
   docker-build-and-push:
     needs: build-test
-    if: ${{ ${IS_DEVELOP} || ${IS_MASTER} }}
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/develop'
     name: Docker Build and Publish
     runs-on: ubuntu-latest
     steps:
