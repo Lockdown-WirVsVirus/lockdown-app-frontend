@@ -11,33 +11,46 @@ on:
 jobs:
 
   # Build & Test Job
-  build-test:
-    runs-on: ${{ matrix.os }}
+  # build-test:
+  #   runs-on: ${{ matrix.os }}
 
-    strategy:
-      matrix:
-        node-version: [12.x]
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+  #   strategy:
+  #     matrix:
+  #       node-version: [12.x]
+  #       os:
+  #       - ubuntu-latest
+  #       # - windows-latest
+  #       # - macOS-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm ci --no-optional
-      - run: npm run build --if-present
-      - run: npm run test
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Use Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@master
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+  #       env:
+  #         CI: true
+  #     - run: |
+  #         npm install
+  #         npm run build
+  #         npm run test
 
   # Dockerize and deploy
   # needs build-test
   docker-build-and-push:
-    needs: build-test
+    # needs: build-test
     name: Docker Build and Publish
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@master
+
+    # Build the Docker image
+    - name: Build
+      run: |
+        docker build . \
+        --tag eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_SHA} \
+        --tag eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_REF#refs/heads/}
 
     # Setup gcloud CLI
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
@@ -51,18 +64,10 @@ jobs:
         # Set up docker to authenticate
         # via gcloud command-line tool.
         gcloud auth configure-docker
-
-    # Build the Docker image
-    - name: Build
-      run: |
-        docker build . \
-        --tag eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_SHA} \
-        --tag eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_REF#refs/heads/}
     # Push the Docker image to Google Container Registry
+    # by pushing the registry without tag we push all available tags
     - name: Publish
-      run: |
-        docker push eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_REF#refs/heads/} && \
-        docker push eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_SHA}
+      run: docker push eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}
 
     # get cloud run name by branch
     - name: Set env to dev
@@ -75,13 +80,13 @@ jobs:
         echo "::set-env name=CLOUD_RUN_NAME::${{ secrets.GCLOUD_APP_NAME }}"
 
     # Deploy image to Cloud Run
-    # - name: Deploy
-    #   run: |-
-    #     echo "deploy to cloud run $CLOUD_RUN_NAME" && \
-    #     gcloud run deploy "$CLOUD_RUN_NAME" \
-    #       --quiet \
-    #       --region "europe-west1" \
-    #       --image eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_SHA} \
-    #       --platform "managed" \
-    #       --allow-unauthenticated
+    - name: Deploy
+      run: |-
+        echo "deploy to cloud run $CLOUD_RUN_NAME" && \
+        gcloud run deploy "$CLOUD_RUN_NAME" \
+          --quiet \
+          --region "europe-west1" \
+          --image eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}:${GITHUB_SHA} \
+          --platform "managed" \
+          --allow-unauthenticated
 
