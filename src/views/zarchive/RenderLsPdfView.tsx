@@ -23,7 +23,7 @@ const RenderLsPdfView = (props: CheckViewProperties) => {
     console.log(objectUrl);
 
     return (
-        <iframe width="100%" height="500px" src={objectUrl}></iframe>
+        <iframe title="ticket pdf view" width="100%" height="500px" src={objectUrl}></iframe>
     );
 };
 

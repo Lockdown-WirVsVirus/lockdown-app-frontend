@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import Header from "../components/Header";
+import {useHistory} from 'react-router-dom';
+import Header from "../../components/Header";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {
     Container,
@@ -12,8 +13,8 @@ import {
     Typography
 } from "@material-ui/core";
 
-import IdentityProvider from "../service/identityProvider";
-import {UserIdentity} from "../model/UserIdentity";
+import IdentityProvider from "../../service/identityProvider";
+import {UserIdentity} from "../../model/UserIdentity";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,10 +33,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LoginView = () => {
 
+    const history = useHistory();
+
     const [loginState, setLoginState] = useState<UserIdentity>({} as UserIdentity);
 
     const sendLogin = () => {
         IdentityProvider.setIdentity(loginState.firstname, loginState.lastname, loginState.personalId);
+        history.push('home');
     }
 
     const onChange = (fieldName: string) => ({target}: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +75,7 @@ const LoginView = () => {
                                    aria-describedby="registReasonHelper"/>
                         </FormControl>
                         <FormControl margin="normal" fullWidth={true}>
-                            <Button variant="contained" href={"\leave"} onClick={sendLogin}>Anmelden</Button>
+                            <Button variant="contained" onClick={sendLogin}>Anmelden</Button>
                         </FormControl>
                     </CardContent>
                 </Card>

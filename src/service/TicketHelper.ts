@@ -40,6 +40,7 @@ const TicketHelper = {
             country: ''
         } as Address
     },
+
     emptyTicketPayload: (): TicketRequestDto => {
         return {
             passportId: IdentityProvider.getIdentity()?.identificationDocumentId,
