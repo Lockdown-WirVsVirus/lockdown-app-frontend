@@ -28,7 +28,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "secure-ls": "^1.2.6",
-    "typescript": "~3.8.3"
+    "typescript": "~3.9.3"
   },
   "scripts": {
     "start": "react-scripts start",
