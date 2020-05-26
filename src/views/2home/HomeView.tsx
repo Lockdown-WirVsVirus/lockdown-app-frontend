@@ -1,7 +1,10 @@
 import React from "react";
-import {useHistory} from 'react-router-dom';
-import Header from "../../components/Header";
+import moment from "moment";
+import {Link, useHistory} from 'react-router-dom';
+import Header from '../../components/Header';
+import TicketHelper from '../../service/TicketHelper';
 import AddIcon from '@material-ui/icons/Add';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Fab,
@@ -10,7 +13,8 @@ import {
     CardContent,
     Tabs, Tab,
     Typography,
-    Box,
+    Box, List, ListItem, ListItemText,
+    ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails
 } from "@material-ui/core";
 
 import TicketPreview from "./components/TicketPreview";
@@ -28,6 +32,13 @@ const useStyles = makeStyles(theme => ({
         bottom: theme.spacing(2),
         right: theme.spacing(2),
     },
+    expandable: {
+        backgroundColor: 'transparent',
+    },
+    expandableHeading: {},
+    list: {
+        width: '100%',
+    }
 }));
 
 interface TabPanelProps {
@@ -71,6 +82,11 @@ const TicketDetailsView = () => {
 
   const activeTickets = TicketStorage.getActiveTickets();
   const pastTickets = TicketStorage.getTicketsInPast(7);
+  const futureTickets = TicketStorage.getTicketsInFuture();
+
+  const renderDateAsSecondary = (date: Date) => {
+      return moment(date).format('DD.MM hh:mm')
+  }
 
   return (
     <div>
@@ -87,7 +103,7 @@ const TicketDetailsView = () => {
                         centered
                     >
                         <Tab label="Aktiv" />
-                        <Tab label="Abgelaufen" />
+                        <Tab label="Zukünftig" />
                     </Tabs>
                     <TabPanel value={tabValue} index={0}>
                         { activeTickets && activeTickets.length > 0 ?
@@ -98,10 +114,10 @@ const TicketDetailsView = () => {
                         }
                     </TabPanel>
                     <TabPanel value={tabValue} index={1}>
-                        { pastTickets && pastTickets.length > 0 ?
-                            pastTickets.map(ticket => <TicketPreview ticket={ticket} />)
+                        { futureTickets && futureTickets.length > 0 ?
+                            <TicketPreview ticket={futureTickets[0]} />
                             : <Box className={classes.noActiveTicket} component="div">
-                                Keine abgelaufenen Ticket vorhanden.
+                                Kein zukünftiges Ticket vorhanden.
                             </Box>
                         }
                     </TabPanel>
@@ -109,6 +125,30 @@ const TicketDetailsView = () => {
             </Card>
 
             <br/>
+
+            { pastTickets && pastTickets.length > 0  && <div>
+                <ExpansionPanel className={classes.expandable}>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.expandableHeading}>Abgelaufene Tickets</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <List className={classes.list} aria-label="expired tickets">
+                        { pastTickets.map(ticket =>
+                            <ListItem alignItems="flex-start" button divider component={Link} to={'/ticket/' + ticket.ticketId}>
+                                <ListItemText
+                                    primary={TicketHelper.mapReasonToGerman(ticket.reason)}
+                                    secondary={renderDateAsSecondary(ticket.validFromDateTime) + ' - ' + renderDateAsSecondary(ticket.validToDateTime)}
+                                />
+                            </ListItem>
+                        )}
+                        </List>
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                </div> }
 
         </Container>
 

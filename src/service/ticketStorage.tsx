@@ -52,6 +52,15 @@ export class TicketStorage {
         });
     }
 
+    static getTicketsInFuture() : TicketResponseDto[] | null {
+        const now = moment();
+        return TicketStorage.getCurrentTicketsArray().filter(ticket => {
+            const startingAfterNow = moment(ticket.validFromDateTime).isAfter(now);
+
+            return startingAfterNow;
+        });
+    }
+
     static getTicketsInPast(days: number) : TicketResponseDto[] | null {
         const now = moment();
         const maxPastDate = moment().add(-days, "days");
