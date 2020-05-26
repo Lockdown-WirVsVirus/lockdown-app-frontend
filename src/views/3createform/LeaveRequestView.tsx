@@ -98,10 +98,11 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         console.log('ticket response',response);
 
         if (response.status === 200 || response.status === 201) {
+            const ticketResponseDto = response.data;
             // save created ticket to LS
-            TicketStorage.addTicket(response.data);
+            TicketStorage.addTicket(ticketResponseDto);
             // go to details to show it
-            history.push('details');
+            history.push('/ticket/' + ticketResponseDto.ticketId);
         } else {
             // TODO: show error TOAST
         }
