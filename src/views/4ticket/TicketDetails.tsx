@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import Header from "../components/Header";
+import { useParams, useHistory } from "react-router-dom";
+import Header from "../../components/Header";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import {
+  Button,
   Container,
   Card,
   CardContent,
   Typography
 } from "@material-ui/core";
-import { TicketResponseDto, Address } from '../gen-backend-api/api';
+import { TicketResponseDto, Address } from '../../gen-backend-api/api';
 import QRCode from 'qrcode.react';
 import moment from "moment";
 
-import IdentityProvider from "../service/identityProvider";
-import TicketStorage from "../service/ticketStorage";
-import TicketHelper from "../service/TicketHelper";
+import IdentityProvider from "../../service/identityProvider";
+import TicketStorage from "../../service/ticketStorage";
+import TicketHelper from "../../service/TicketHelper";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,16 +33,26 @@ const useStyles = makeStyles(theme => ({
 
 const TicketDetailsView = () => {
   const classes = useStyles();
+  const history = useHistory();
 
-  const ticket = TicketStorage.getInterestingTicket();
-  const [ticketPayload, setTicketPayload] = useState<TicketResponseDto>(ticket as TicketResponseDto);
+  let { id } = useParams();
+
+  // get ticket
+  const ticket = TicketStorage.getTicketById(id);
+
+  // ticket state and init with ticket from storage
+  const [ticketPayload] = useState<TicketResponseDto>(ticket as TicketResponseDto);
+
+  const goHome = () => {
+    history.push('/home')
+  }
 
   const renderAddress = (address: Address) => {
     return address && (
       <div>
       {
-      address.street || '' + " " + address.houseNumber || '' + ", " +
-      address.zipCode || '' + " " + address.city || ''
+      (address.street || '') + " " + (address.houseNumber || '') + ", " +
+      (address.zipCode || '') + " " + (address.city || '')
       }
       </div>
     );
@@ -93,7 +105,7 @@ const TicketDetailsView = () => {
               <Grid item xs={6}>
                 <Typography className={classes.paper} variant="h5">
                 { ticketPayload?.validFromDateTime && ticketPayload?.validToDateTime ?
-                  moment(ticketPayload.validFromDateTime).format('hh:mm') + " - " + moment(ticketPayload.validToDateTime).format('hh:mm') : '' }
+                  moment(ticketPayload.validFromDateTime).format('HH:mm') + " - " + moment(ticketPayload.validToDateTime).format('HH:mm') : '' }
                 </Typography>
               </Grid>
             </Grid>
@@ -150,6 +162,10 @@ const TicketDetailsView = () => {
             </Grid>
           </CardContent>
         </Card>
+
+        <br/>
+
+        <Button variant="contained" onClick={goHome}>Zurück zur Übersicht</Button>
       </Container>
     </div>
   );

@@ -21,9 +21,14 @@ const IdentityProvider = {
             identificationDocumentId,
         }));
     },
+
     isLoggedIn() {
         const identity = IdentityProvider.getIdentity();
         return identity.firstName && identity.lastName && identity.identificationDocumentId ? true : false;
+    },
+
+    logout() {
+        window.localStorage.removeItem('identity');
     }
 }
 

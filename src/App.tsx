@@ -1,15 +1,14 @@
 import React from "react";
 import {Router, Route} from "react-router-dom";
 import "./App.css";
-import LoginView from "./view/LoginView";
-import CheckView from "./view/CheckView";
-import DownloadPdfView from "./view/DownloadPdfView";
-import ShowLsPdfView from "./view/ShowLsPdfView";
-import RenderLsPdfView from "./view/RenderLsPdfView";
-import LeaveRequestView from "./view/LeaveRequestView";
-import TicketDetailsView from "./view/TicketDetails"
-import TicketView from "./view/TicketView";
-import HomeView from "./view/HomeView";
+import LoginView from "./views/1login/LoginView";
+import CheckView from "./views/zarchive/CheckView";
+import DownloadPdfView from "./views/zarchive/DownloadPdfView";
+import ShowLsPdfView from "./views/zarchive/ShowLsPdfView";
+import RenderLsPdfView from "./views/zarchive/RenderLsPdfView";
+import LeaveRequestView from "./views/3createform/LeaveRequestView";
+import TicketDetailsView from "./views/4ticket/TicketDetails"
+import HomeView from "./views/2home/HomeView";
 import {createBrowserHistory} from 'history';
 import moment from "moment";
 import "moment/locale/de";
@@ -23,16 +22,19 @@ function App() {
     console.log('user is logged in => ', IdentityProvider.isLoggedIn());
     return (
         <Router history={history}>
-            <Route path="/" exact component={IdentityProvider.isLoggedIn() ? LeaveRequestView : LoginView}/>
+            <Route path="/" exact component={IdentityProvider.isLoggedIn() ? HomeView : LoginView}/>
             <Route path="/login" component={LoginView}/>
+            <Route path="/home" component={HomeView}/>
+            <Route path="/create" component={LeaveRequestView}/>
+            <Route path="/ticket/:id" component={TicketDetailsView}/>
+
+            {/* Debug / Develop Routes */}
             <Route path="/check" component={CheckView}/>
             <Route path="/download" component={DownloadPdfView}/>
             <Route path="/open" component={ShowLsPdfView}/>
             <Route path="/render" component={RenderLsPdfView}/>
             <Route path="/leave" component={LeaveRequestView}/>
-            <Route path="/ticket" component={TicketView}/>
-            <Route path="/home" component={HomeView}/>
-            <Route path="/details" component={TicketDetailsView}/>
+
         </Router>
     );
 }

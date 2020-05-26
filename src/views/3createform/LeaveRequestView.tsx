@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, { useState } from "react"
 import moment from "moment";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
@@ -17,20 +17,16 @@ import {
 
 import Grid from '@material-ui/core/Grid';
 import MomentUtils from '@date-io/moment';
-import {DateTimePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
+import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 
-import Header from "../components/Header";
-import IdentityProvider from "../service/identityProvider";
+import Header from "../../components/Header";
+import IdentityProvider from "../../service/identityProvider";
 import MenuItem from "@material-ui/core/MenuItem";
-import { TicketRequestDto } from '../gen-backend-api/api';
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import SnoozeIcon from "@material-ui/icons/Snooze";
-import AlarmIcon from "@material-ui/icons/AddAlarm";
+import { TicketRequestDto } from '../../gen-backend-api/api';
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
-import TicketFacade from "../service/TicketFacade";
+import TicketFacade from "../../service/TicketFacade";
 import {useHistory} from 'react-router-dom';
-import TicketStorage from "../service/ticketStorage";
+import TicketStorage from "../../service/ticketStorage";
 export interface LeaveRequestViewProperties {
 
 }
@@ -47,6 +43,12 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         cards: {
             marginBottom: 22,
+        },
+        timepicker: {
+            marginLeft: theme.spacing(2),
+        },
+        durationInput: {
+            marginLeft: theme.spacing(2),
         }
     }),
 );
@@ -63,25 +65,44 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         // reason: 'sports'
     } as T);
 
-    useEffect(() => {
-        setTicketPayload({...ticketPayload, validFromDateTime: new Date().getTime()} as T);
-    }, [])
+    const [dateTimes, setDateTimes] = useState({
+        validFromDate: moment(),
+        validToDate: moment(),
+        // begin next full hour
+        validFromTime: moment().add(1, "hour").minutes(0),
+        // ends next full hour + 2 hours
+        validToTime: moment().add(3, "hour").minutes(0),
+    });
 
     const handleClick = async () => {
 
         ticketPayload.passportId = IdentityProvider.getIdentity().identificationDocumentId
 
+        // create new date object from moment
+        // and set time in them
+        const from = moment(dateTimes.validFromDate);
+        from.hours(dateTimes.validFromTime.hours());
+        from.minutes(dateTimes.validFromTime.minutes());
+        from.seconds(0);
+        const to = moment(dateTimes.validToDate);
+        to.hours(dateTimes.validToTime.hours());
+        to.minutes(dateTimes.validToTime.minutes());
+        to.seconds(0);
+
+        ticketPayload.validFromDateTime = from.toDate();
+        ticketPayload.validToDateTime = to.toDate();
+
+        console.log('create ticket request attempt', ticketPayload);
+
         const response = await TicketFacade.createTicket(ticketPayload);
-        console.log('sending to backend => ',response);
+        console.log('ticket response',response);
 
         if (response.status === 200 || response.status === 201) {
-            // FIXME: currently clear before
-            TicketStorage.clearTickets();
-
+            const ticketResponseDto = response.data;
             // save created ticket to LS
-            TicketStorage.addTicket(response.data);
+            TicketStorage.addTicket(ticketResponseDto);
             // go to details to show it
-            history.push('details');
+            history.push('/ticket/' + ticketResponseDto.ticketId);
         } else {
             // TODO: show error TOAST
         }
@@ -100,20 +121,34 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         setTicketPayload({...ticketPayload, [propertyName]: {street: target.value}} as T)
     }
 
-    const onDateChange = (date: MaterialUiPickersDate): void => {
-        if (!date) {
-            return;
-        }
-        setTicketPayload({...ticketPayload, validFromDateTime: date.toDate()} as T);
-    }
+    const onDateChange = (what: "start" | "end") =>
+        (date: MaterialUiPickersDate): void => {
+            if (!date) {
+                return;
+            }
 
-    const onDurationChange = ({target}: React.ChangeEvent<HTMLInputElement>): void => {
-        if (!ticketPayload?.validFromDateTime) {
-            return;
+            if (what === "start") {
+                setDateTimes({ ...dateTimes, validFromDate: moment(date.toDate()) });
+            }
+            if (what === "end") {
+                setDateTimes({ ...dateTimes, validToDate: moment(date.toDate()) });
+            }
         }
-        const validToDateTime = moment(ticketPayload.validFromDateTime.getTime()).add(target.value, 'hours');
-        setTicketPayload({...ticketPayload, validToDateTime: validToDateTime.toDate()})
-    }
+
+    const onTimeChange = (what: "start" | "end") =>
+        ({target}: React.ChangeEvent<HTMLInputElement>): void => {
+            const value = target.value;
+            if (!value) {
+                return;
+            }
+
+            if (what === "start") {
+                setDateTimes({ ...dateTimes, validFromTime: moment(value, "HH:mm") });
+            }
+            if (what === "end") {
+                setDateTimes({ ...dateTimes, validToTime: moment(value, "HH:mm") });
+            }
+        }
 
     const isWorkTicket = (): boolean | undefined => {
         return ticketPayload?.reason === 'work';
@@ -134,7 +169,8 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
                         <FormControl fullWidth={true}>
                             <InputLabel htmlFor='requestReason'>Grund</InputLabel>
                             <Select id="requestReason" value={ticketPayload?.reason} onChange={onReasonChange}>
-                                <MenuItem value={'work'}>Arbeiten</MenuItem>
+                                {/* TODO: implement work code stuff. In backend too */}
+                                {/* <MenuItem value={'work'}>Arbeiten</MenuItem> */}
                                 <MenuItem value={'food'}>Lebensmittel Einkauf</MenuItem>
                                 <MenuItem value={'health'}>Arzt</MenuItem>
                                 <MenuItem value={'help'}>Hilfeleistung für Mitbürger</MenuItem>
@@ -184,43 +220,67 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
                             Zeitliche Details
                         </Typography>
                         <MuiPickersUtilsProvider utils={MomentUtils} libInstance={moment} locale="de">
-                            <Grid container justify="space-between">
-
-                                <DateTimePicker
+                            <Grid container>
+                                <KeyboardDatePicker
+                                    disableToolbar
                                     autoOk
                                     disablePast
-                                    hideTabs
-                                    ampm={false}
-                                    value={ticketPayload?.validFromDateTime}
-                                    onChange={onDateChange}
-                                    allowKeyboardControl={false}
-                                    helperText="Hardcoded helper text"
-                                    leftArrowIcon={<AlarmIcon/>}
-                                    leftArrowButtonProps={{"aria-label": "Prev month"}}
-                                    rightArrowButtonProps={{"aria-label": "Next month"}}
-                                    rightArrowIcon={<SnoozeIcon/>}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton>
-                                                    <AlarmIcon/>
-                                                </IconButton>
-                                            </InputAdornment>
-                                        ),
+                                    format="DD.MM.YYYY"
+                                    id="ticket-request-start-date-picker"
+                                    label="Beginn Datum "
+                                    value={dateTimes.validFromDate.toDate()}
+                                    KeyboardButtonProps={{
+                                    'aria-label': 'change date',
                                     }}
+                                    onChange={onDateChange('start')}
                                 />
+                                <TextField
+                                    id="ticket-request-start-time-input"
+                                    label="Uhrzeit"
+                                    type="time"
+                                    defaultValue={dateTimes.validFromTime.format("HH:mm")}
+                                    className={classes.timepicker}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300, // 5 min
+                                    }}
+                                    onChange={onTimeChange('start')}
+                                />
+                            </Grid>
 
+                            <Grid container>
+                                <KeyboardDatePicker
+                                    disableToolbar
+                                    variant="inline"
+                                    autoOk
+                                    disablePast
+                                    format="DD.MM.YYYY"
+                                    id="ticket-request-end-date-picker"
+                                    label="Ende Datum "
+                                    value={dateTimes.validToDate.toDate()}
+                                    KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                    }}
+                                    onChange={onDateChange('end')}
+                                />
+                                <TextField
+                                    id="ticket-request-end-time-input"
+                                    label="Uhrzeit"
+                                    type="time"
+                                    defaultValue={dateTimes.validToTime.format("HH:mm")}
+                                    className={classes.timepicker}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300, // 5 min
+                                    }}
+                                    onChange={onTimeChange('end')}
+                                />
                             </Grid>
                         </MuiPickersUtilsProvider>
-
-                        <FormControl fullWidth={true}>
-                            <InputLabel htmlFor="requestDuration">Dauer</InputLabel>
-                            <Input name="requestDuration" id="requestDuration"
-                                   onChange={onDurationChange}
-                                   aria-describedby="requestDurationHelper"/>
-                            <FormHelperText id="requestDurationHelper">Wieviele Stunden wirst du bis zur Rückkehr
-                                benötigen?</FormHelperText>
-                        </FormControl>
 
                     </CardContent>
                 </Card>

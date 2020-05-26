@@ -1,4 +1,5 @@
 import { TicketResponseDto } from "../gen-backend-api/api";
+import moment from "moment";
 
 export interface IIdentity {
     firstName: string;
@@ -41,6 +42,34 @@ export class TicketStorage {
 
     static getInterestingTicket() : TicketResponseDto | null {
         return TicketStorage.getCurrentTicketsArray().length >= 1 ? TicketStorage.getCurrentTicketsArray()[0] : null;
+    }
+
+    static getActiveTickets() : TicketResponseDto[] | null {
+        const now = moment();
+        return TicketStorage.getCurrentTicketsArray().filter(ticket => {
+            // tickets with started before and will end later
+            return moment(ticket.validFromDateTime).isBefore(now) && moment(ticket.validToDateTime).isAfter(now);
+        });
+    }
+
+    static getTicketsInFuture() : TicketResponseDto[] | null {
+        const now = moment();
+        return TicketStorage.getCurrentTicketsArray().filter(ticket => {
+            const startingAfterNow = moment(ticket.validFromDateTime).isAfter(now);
+
+            return startingAfterNow;
+        });
+    }
+
+    static getTicketsInPast(days: number) : TicketResponseDto[] | null {
+        const now = moment();
+        const maxPastDate = moment().add(-days, "days");
+        return TicketStorage.getCurrentTicketsArray().filter(ticket => {
+            const endedBeforeNow = moment(ticket.validToDateTime).isBefore(now);
+            const startedAfterMaxPast = moment(ticket.validFromDateTime).isAfter(maxPastDate);
+
+            return endedBeforeNow && startedAfterMaxPast;
+        });
     }
 
     static getTicketById(ticketId: string) {
