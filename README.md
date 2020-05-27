@@ -1,3 +1,5 @@
+![safeticket-logo-light](./puublic/../public/safeticket-logo-light.png)
+
 # SafeTicket Frontend
 
 ## Local
