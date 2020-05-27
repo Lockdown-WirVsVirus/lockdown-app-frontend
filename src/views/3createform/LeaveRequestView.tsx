@@ -31,6 +31,7 @@ export interface LeaveRequestViewProperties {
 
 }
 
+type AddressProps = 'street' | 'houseNumber' | 'zipCode' | 'city';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -58,8 +59,8 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
     const history = useHistory();
 
     const [ticketPayload, setTicketPayload] = useState<T>({
-        // startAddress: { street: "bla" },
-        // endAddress: { street: "blub" },
+        startAddress: {  },
+        endAddress: {  },
         // validFromDateTime: new Date(),
         // validToDateTime: moment(new Date().getTime()).add(4, 'hours').toDate(),
         // reason: 'sports'
@@ -117,8 +118,10 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         setTicketPayload({...ticketPayload, employerCode: target.value} as T);
     }
 
-    const onAddressChange = (propertyName: string) => ({target}: React.ChangeEvent<HTMLInputElement>): void => {
-        setTicketPayload({...ticketPayload, [propertyName]: {street: target.value}} as T)
+    const onAddressChange = (which: "startAddress" | "endAddress", propertyName: AddressProps) => ({target}: React.ChangeEvent<HTMLInputElement>): void => {
+        const address = ticketPayload[which];
+        address[propertyName] = target.value;
+        setTicketPayload({...ticketPayload, [which]: address} as T)
     }
 
     const onDateChange = (what: "start" | "end") =>
@@ -185,8 +188,9 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
                                 <InputLabel htmlFor="requestStartAddress">Arbeitgeber-Bescheinigung-Code</InputLabel>
                                 <Input name="requestStartAddress" onChange={onEmployerCodeChange}
                                        aria-describedby="requestStartAddressHelper"/>
-                                <FormHelperText id="requestStartAddressHelper">Bescheinigung-Code des
-                                    Arbeitgebers.</FormHelperText>
+                                <FormHelperText id="requestStartAddressHelper">
+                                    Bescheinigung-Code des Arbeitgebers.
+                                </FormHelperText>
                             </FormControl>
                         </div>
                         }
@@ -196,21 +200,70 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
                 <Card className={classes.cards}>
                     <CardContent>
                         <Typography color="textPrimary" gutterBottom>
-                            Start- &amp; Ziel-Adresse
+                            Start-Adresse
                         </Typography>
-                        <FormControl fullWidth={true}>
-                            <InputLabel htmlFor="requestStartAddress">Start Adresse</InputLabel>
-                            <Input name="requestStartAddress" onChange={onAddressChange('startAddress')} value={ticketPayload?.startAddress?.street}
-                                   aria-describedby="requestStartAddressHelper"/>
-                            <FormHelperText id="requestStartAddressHelper">Die Anschrift deines
-                                Ausgangspunkt.</FormHelperText>
-                        </FormControl>
-                        <FormControl fullWidth={true}>
-                            <InputLabel htmlFor="requestTargetAddress">Ziel Adresse</InputLabel>
-                            <Input name="requestTargetAddress" onChange={onAddressChange('endAddress')}
-                                   id="requestTargetAddress" aria-describedby="requestTargetAddressHelper"/>
-                            <FormHelperText id="requestTargetAddressHelper">Die Anschrift deines Ziels.</FormHelperText>
-                        </FormControl>
+
+                        <Grid container justify="space-between">
+                            <FormControl component={Grid} item xs={12} sm={5}>
+                                <InputLabel htmlFor="requestStartAddressStreet">Straße</InputLabel>
+                                <Input id="startAddressStreet" name="requestStartAddressStreet" onChange={onAddressChange('startAddress', 'street')} value={ticketPayload?.startAddress?.street}
+                                    aria-describedby="requestStartAddressStreetHelper"/>
+                                <FormHelperText>z.B. Marienplatz</FormHelperText>
+                            </FormControl>
+                            <FormControl component={Grid} item xs={12} sm={5}>
+                                <InputLabel htmlFor="requestStartAddressHouseNum">Hausnummer</InputLabel>
+                                <Input id="startAddressHouseNum" name="requestStartAddressHouseNum" onChange={onAddressChange('startAddress', 'houseNumber')} value={ticketPayload?.startAddress?.houseNumber}
+                                    aria-describedby="requestStartAddressHouseNumHelper"/>
+                                    <FormHelperText>z.B. 21a</FormHelperText>
+                            </FormControl>
+                            <FormControl component={Grid} item xs={12} sm={5}>
+                                <InputLabel htmlFor="requestStartAddressZipCode">Postleitzahl</InputLabel>
+                                <Input id="startAddressZipCode" name="requestStartAddressZipCode" onChange={onAddressChange('startAddress', 'zipCode')} value={ticketPayload?.startAddress?.zipCode}
+                                    aria-describedby="requestStartAddressZipCodeHelper"/>
+                                <FormHelperText>z.B. 70180</FormHelperText>
+                            </FormControl>
+                            <FormControl component={Grid} item xs={12} sm={5}>
+                                <InputLabel htmlFor="requestStartAddressCity">Stadt</InputLabel>
+                                <Input id="startAddressCity" name="requestStartAddressCity" onChange={onAddressChange('startAddress', 'city')} value={ticketPayload?.startAddress?.city}
+                                    aria-describedby="requestStartAddressCityHelper"/>
+                                    <FormHelperText>z.B. Stuttgart</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                    </CardContent>
+                </Card>
+
+                <Card className={classes.cards}>
+                    <CardContent>
+                        <Typography color="textPrimary" gutterBottom>
+                            Ziel-Adresse
+                        </Typography>
+
+                        <Grid container justify="space-between">
+                            <FormControl component={Grid} item xs={12} sm={5}>
+                                <InputLabel htmlFor="requestEndAddressStreet">Straße</InputLabel>
+                                <Input id="endAddressStreet" name="requestEndAddressStreet" onChange={onAddressChange('endAddress', 'street')} value={ticketPayload?.endAddress?.street}
+                                    aria-describedby="requestEndAddressStreetHelper"/>
+                                <FormHelperText>z.B. Königstraße</FormHelperText>
+                            </FormControl>
+                            <FormControl component={Grid} item xs={12} sm={5}>
+                                <InputLabel htmlFor="requestEndAddressHouseNum">Hausnummer</InputLabel>
+                                <Input id="endAddressHouseNum" name="requestEndAddressHouseNum" onChange={onAddressChange('endAddress', 'houseNumber')} value={ticketPayload?.endAddress?.houseNumber}
+                                    aria-describedby="requestEndAddressHouseNumHelper"/>
+                                    <FormHelperText>z.B. 21a</FormHelperText>
+                            </FormControl>
+                            <FormControl component={Grid} item xs={12} sm={5}>
+                                <InputLabel htmlFor="requestEndAddressZipCode">Postleitzahl</InputLabel>
+                                <Input id="endAddressZipCode" name="requestEndAddressZipCode" onChange={onAddressChange('endAddress', 'zipCode')} value={ticketPayload?.endAddress?.zipCode}
+                                    aria-describedby="requestEndAddressZipCodeHelper"/>
+                                <FormHelperText>z.B. 70180</FormHelperText>
+                            </FormControl>
+                            <FormControl component={Grid} item xs={12} sm={5}>
+                                <InputLabel htmlFor="requestEndAddressCity">Stadt</InputLabel>
+                                <Input id="endAddressCity" name="requestEndAddressCity" onChange={onAddressChange('endAddress', 'city')} value={ticketPayload?.endAddress?.city}
+                                    aria-describedby="requestEndAddressCityHelper"/>
+                                    <FormHelperText>z.B. Stuttgart</FormHelperText>
+                            </FormControl>
+                        </Grid>
                     </CardContent>
                 </Card>
 
