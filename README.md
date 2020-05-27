@@ -1,4 +1,4 @@
-![safeticket-logo-light](./puublic/../public/safeticket-logo-light.png)
+![safeticket-logo-light](./public/safeticket-logo-light.png)
 
 # SafeTicket Frontend
 
