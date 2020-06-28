@@ -23,24 +23,24 @@ const PrivacyStatementView = () => {
         <Card>
           <CardContent>
             <Typography variant="h5" component="h2">
-              <b>SafeTicket</b> speichert keine persönlichen Daten auf einen
-              externen Server.
+              Ihre Daten bleiben sicher bei Ihnen
             </Typography>
             <Typography variant="body2" component="p">
               <p>
-                Die persönlichen Angaben bleiben auf dem Gerät und sind somit
-                sicher vor Hackern und Datenleaks. Zur Authentifizierung Ihres
-                angelegten Ticktes wird die Personalnummer versendet. Diese wird
-                allerdings durch ein mordernes Verfahren, ein sogennanter Hash,
-                verschlüsselt, wodurch niemand diese Personalnummer nicht
-                rückverfolgen können. Somit sind ihre Daten sicher.
+                Ihre persönlichen Daten bleiben auf Ihrem Endgerät. Zwar wird
+                Ihre Personalnummer zur Authentifizierung Ihres angelegten
+                Tickets an einen externen Server versendet, allerdings wird
+                diese vorher durch ein modernes Verfahren, einen sogenannten
+                Hash, verschlüsselt. Eine Rückverfolgung Ihrer Personalnummer
+                auf dem Server ist nicht möglich. Ihre Daten sind vor
+                Hackern und Datenleaks sicher.
               </p>
             </Typography>
             <Typography variant="body2" component="p">
               <p>
                 {" "}
-                Die verschlüsselte Personalnummer wird auch nicht den Behörden
-                oder sonstigen dritten weitergeleitet.
+                Ihre verschlüsselte Personalnummer wird auch nicht an Behörden
+                oder einen sonstigen Dritten weitergeleitet
               </p>
             </Typography>
 
