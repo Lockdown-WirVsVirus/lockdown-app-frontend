@@ -7,8 +7,9 @@ import DownloadPdfView from "./views/zarchive/DownloadPdfView";
 import ShowLsPdfView from "./views/zarchive/ShowLsPdfView";
 import RenderLsPdfView from "./views/zarchive/RenderLsPdfView";
 import LeaveRequestView from "./views/3createform/LeaveRequestView";
-import TicketDetailsView from "./views/4ticket/TicketDetails"
+import TicketDetailsView from "./views/4ticket/TicketDetails";
 import HomeView from "./views/2home/HomeView";
+import PrivacyStatementView from "./views/5dataprivacystatement/PrivacyStatement";
 import {createBrowserHistory} from 'history';
 import moment from "moment";
 import "moment/locale/de";
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" exact component={IdentityProvider.isLoggedIn() ? HomeView : LoginView}/>
             <Route path="/login" component={LoginView}/>
             <Route path="/home" component={HomeView}/>
+            <Route path="/privacy" component={PrivacyStatementView}/>
             <Route path="/create" component={LeaveRequestView}/>
             <Route path="/ticket/:id" component={TicketDetailsView}/>
 
