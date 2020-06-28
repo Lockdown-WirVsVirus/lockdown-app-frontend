@@ -20,7 +20,7 @@
     "@types/react-pdf": "^4.0.3",
     "axios": "^0.19.2",
     "crypto-js": "^4.0.0",
-    "history": "^4.10.1",
+    "history": "^5.0.0",
     "moment": "^2.24.0",
     "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
@@ -28,7 +28,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "secure-ls": "^1.2.6",
-    "typescript": "~3.9.3"
+    "typescript": "~3.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
