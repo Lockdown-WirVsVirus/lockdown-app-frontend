@@ -6,6 +6,7 @@
     "@date-io/moment": "1.x",
     "@material-ui/core": "^4.9.14",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/styles": "^4.9.14",
     "@mikecousins/react-pdf": "^5.5.1",

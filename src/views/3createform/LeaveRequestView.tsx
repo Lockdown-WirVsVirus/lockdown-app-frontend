@@ -15,6 +15,8 @@ import {
     Typography,
 } from '@material-ui/core';
 
+import Alert from '@material-ui/lab/Alert';
+
 import Grid from '@material-ui/core/Grid';
 import MomentUtils from '@date-io/moment';
 import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
@@ -29,6 +31,11 @@ import {useHistory} from 'react-router-dom';
 import TicketStorage from "../../service/ticketStorage";
 export interface LeaveRequestViewProperties {
 
+}
+
+export interface ErrorResponseDto {
+    statusCode: number;
+    message: string;
 }
 
 type AddressProps = 'street' | 'houseNumber' | 'zipCode' | 'city';
@@ -66,6 +73,8 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         // reason: 'sports'
     } as T);
 
+    const [errorResponse, setErrorResponse] = useState<string>();
+
     const [dateTimes, setDateTimes] = useState({
         validFromDate: moment(),
         validToDate: moment(),
@@ -75,8 +84,10 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         validToTime: moment().add(3, "hour").minutes(0),
     });
 
+    // form submit, send request to api
     const handleClick = async () => {
 
+        // passport from identity provider
         ticketPayload.passportId = IdentityProvider.getIdentity().identificationDocumentId
 
         // create new date object from moment
@@ -95,17 +106,35 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
 
         console.log('create ticket request attempt', ticketPayload);
 
-        const response = await TicketFacade.createTicket(ticketPayload);
-        console.log('ticket response',response);
+        try {
+            const response = await TicketFacade.createTicket(ticketPayload)
+            console.log('ticket response success', response);
 
-        if (response.status === 200 || response.status === 201) {
             const ticketResponseDto = response.data;
             // save created ticket to LS
             TicketStorage.addTicket(ticketResponseDto);
             // go to details to show it
             history.push('/ticket/' + ticketResponseDto.ticketId);
-        } else {
-            // TODO: show error TOAST
+
+        } catch (error) {
+            // this is the main part. Use the response property from the error object
+            console.log('ticket response error status=' + error.response.status, error.response);
+
+            const errorResponse: ErrorResponseDto = error.response.data as ErrorResponseDto;
+            switch (errorResponse.statusCode) {
+                case 400: {
+                    setErrorResponse("Ungültige Eingaben. Bitte die Formularfelder überprüfen.");
+                    break;
+                }
+                case 409: {
+                    setErrorResponse("Im gewählten Zeitraum existiert bereits ein Ticket für die Person.");
+                    break;
+                }
+                default: {
+                    setErrorResponse("Vorgang konnte nicht verarbeitet werden. Formularfelder überprüfen oder später erneut probieren.");
+                    break;
+                }
+            }
         }
 
     }
@@ -337,6 +366,10 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
 
                     </CardContent>
                 </Card>
+
+            {errorResponse != null && <Alert variant="outlined" severity="error">
+                {errorResponse}
+            </Alert>}
 
             <FormControl margin="normal" fullWidth={true}>
                 <Button variant="contained" onClick={handleClick}>Ticket erstellen</Button>
