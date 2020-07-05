@@ -5,6 +5,7 @@ import { AppBar, Drawer, Toolbar, Typography } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
 import IdentityProvider from "../service/identityProvider";
 import MenuIcon from '@material-ui/icons/Menu';
+import AddIcon from '@material-ui/icons/Add';
 
 // Drawer
 import List from '@material-ui/core/List';
@@ -88,6 +89,7 @@ const Header = (props: HeaderProps) => {
           <ListItemText primary="Übersicht" />
         </ListItem>
         <ListItem button onClick={goTo('create')}>
+          <ListItemIcon><AddIcon /></ListItemIcon>
           <ListItemText primary="Neues Ticket" />
         </ListItem>
       </List>
