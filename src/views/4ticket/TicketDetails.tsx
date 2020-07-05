@@ -75,6 +75,28 @@ const TicketDetailsView = () => {
     }
   }
 
+  const generateQrPayload = (ticket: TicketResponseDto): string[] => {
+    const convertAddress = (address: Address): string[] => {
+      return [address.street, address.zipCode, address.city, address.country];
+    }
+    const payload = [
+      ticket.ticketId,
+      ticket.hashedPassportId,
+      ticket.reason,
+      ticket.validFromDateTime.toString(),
+      ticket.validToDateTime.toString(),
+      ...convertAddress(ticket.startAddress),
+      ...convertAddress(ticket.endAddress),
+      ticket.signature,
+    ];
+
+    console.log("ticket qr code payload: ", payload);
+
+    return payload;
+  }
+
+  console.log('rendering ticket details of ticket id: ' + ticketPayload.ticketId, ticketPayload);
+
   return (
     <div>
       <Header title="Ticket Details" />
@@ -98,7 +120,7 @@ const TicketDetailsView = () => {
             { ticketPayload?.ticketId &&
               <Grid container direction="column" alignItems="center" justify="center" className={classes.barcode}>
                 <Grid item xs={12} >
-                    <QRCode value={ticketPayload.ticketId} level="M" />
+                    <QRCode value={ JSON.stringify(generateQrPayload(ticketPayload)) } level="L" size={256} />
                 </Grid>
               </Grid>
             }
