@@ -37,6 +37,8 @@ const TicketDetailsView = () => {
 
   let { id } = useParams();
 
+  const DATE_FORMAT = 'DD.MM.YYYY';
+
   // get ticket
   const ticket = TicketStorage.getTicketById(id);
 
@@ -56,6 +58,21 @@ const TicketDetailsView = () => {
       }
       </div>
     );
+  }
+
+  const renderDate = (from: any, to: any) => {
+    if (!from || !to) {
+      return '';
+    }
+
+    const fromDate = moment(from);
+    const toDate = moment(to);
+
+    if (fromDate.format(DATE_FORMAT) === toDate.format(DATE_FORMAT)) {
+      return fromDate.format(DATE_FORMAT);
+    } else {
+      return fromDate.format(DATE_FORMAT) + ' - ' + toDate.format(DATE_FORMAT);
+    }
   }
 
   return (
@@ -94,7 +111,7 @@ const TicketDetailsView = () => {
               </Grid>
               <Grid item xs={6}>
                 <Typography className={classes.paper} variant="h5">
-                  { ticketPayload?.validFromDateTime ? moment(ticketPayload.validFromDateTime).format('DD.MM.YYYY') : '' }
+                  { renderDate(ticketPayload?.validFromDateTime, ticketPayload?.validToDateTime) }
                 </Typography>
               </Grid>
               <Grid item xs={6}>
