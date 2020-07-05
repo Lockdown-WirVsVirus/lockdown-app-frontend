@@ -1,6 +1,8 @@
-![safeticket-logo-light](./public/safeticket-logo-light.png)
-
 # SafeTicket Frontend
+
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=SafeTicketApp/safeticket-frontend)](https://dependabot.com)
+
+![safeticket-logo-light](./puublic/../public/safeticket-logo-light.png)
 
 ## Local
 
