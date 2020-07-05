@@ -19,7 +19,8 @@ const Page404 = () => {
                             Seite nicht gefunden
                         </Typography>
                         <Typography color="textSecondary">
-                            Da Passierscheine immer personenbezogen sind, benötigen wir ein paar Daten über dich.
+                            Sorry, da ist ein Fehler aufgetreten :-( <br/>
+                            Probiere den Zurück Button vom Browser.
                         </Typography>
                     </CardContent>
                 </Card>
