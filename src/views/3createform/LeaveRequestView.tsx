@@ -97,11 +97,10 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
 
     const [dateTimes, setDateTimes] = useState({
         validFromDate: moment(),
-        validToDate: moment(),
-        // begin next full hour
-        validFromTime: moment().add(1, "hour").minutes(0),
-        // ends next full hour + 2 hours
-        validToTime: moment().add(3, "hour").minutes(0),
+        validFromTime: moment().add(1, "hour").minutes(0), // begin next full hour
+
+        validToDate: moment().add(3, "hour").minutes(0),
+        validToTime: moment().add(3, "hour").minutes(0), // ends next full hour + 2 hours
     });
 
     /**
