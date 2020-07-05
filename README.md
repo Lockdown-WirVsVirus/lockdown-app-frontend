@@ -2,42 +2,27 @@
 
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=SafeTicketApp/safeticket-frontend)](https://dependabot.com)
 
-![safeticket-logo-light](./puublic/../public/safeticket-logo-light.png)
+![safeticket-logo-light](./public/safeticket-logo-light.png)
 
-## Local
+## About the project
 
-**.env.local**
+The idea of safeticket is to provide an easy and convient way to create verifiable documents when going out in case of a lockdown. The term "ticket" stands for a digitalized document with the information of where and how long you want to go outside. It is linked to your personal identification document (e.g. passport) but the system and its servers only store a hash of it. There is no observations of the users.
 
-    # /api/v1 will be added automatically via TicketFacade
-    REACT_APP_BACKEND_URL=http://localhost:4200
+## Repositories
 
-## Available Scripts
+| Repo                | Description                                                                                      |
+|---------------------|--------------------------------------------------------------------------------------------------|
+| safeticket-frontend | The webapp frontend for users to create tickets.                                                 |
+| safeticket-api      | The API to handle tickets                                                                        |
+| permit-dashboard    | The dashboard frontend to generate one-time codes to create a safeticket with a specific purpose |
+| permit-api          | The API to handle one-time safeticket codes with authentication to a group of users.             |
 
-In the project directory, you can run:
+## the team
 
-### `npm run start`
+We are an international and interdisciplinary team which has taken shape while taking part in the German government’s ‘WirVsVirus-Hackathon’. We have been developing the SafeTicket web app, on a pro bono basis, over a four week period.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The team is made up of six IT developers, a police officer, a university language teacher/translator, (5 languages), a lawyer, a marketing specialist and a British journalist from Brussels. We all live and work in Germany or Belgium.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Develop
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-
-### backend api stub
-
-> see openapi-gen.sh
-
+see [DEVELOP.md](DEVELOP.md)
