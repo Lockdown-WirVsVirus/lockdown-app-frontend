@@ -15,6 +15,8 @@ import {
     Typography,
 } from '@material-ui/core';
 
+import Alert from '@material-ui/lab/Alert';
+
 import Grid from '@material-ui/core/Grid';
 import MomentUtils from '@date-io/moment';
 import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
@@ -29,6 +31,11 @@ import {useHistory} from 'react-router-dom';
 import TicketStorage from "../../service/ticketStorage";
 export interface LeaveRequestViewProperties {
 
+}
+
+export interface ErrorResponseDto {
+    statusCode: number;
+    message: string;
 }
 
 type AddressProps = 'street' | 'houseNumber' | 'zipCode' | 'city';
@@ -54,9 +61,29 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+interface ErrorInputFieldStates {
+    reason: boolean;
+    startAddressStreet: boolean;
+    startAddressZipCode: boolean;
+    startAddressCity: boolean;
+    endAddressStreet: boolean;
+    endAddressZipCode: boolean;
+    endAddressCity: boolean;
+}
+
 const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewProperties) => {
     const classes = useStyles();
     const history = useHistory();
+
+    const [errorState, setErrorState] = useState<ErrorInputFieldStates>({
+        reason: false,
+        startAddressStreet: false,
+        startAddressZipCode: false,
+        startAddressCity: false,
+        endAddressStreet: false,
+        endAddressZipCode: false,
+        endAddressCity: false
+    });
 
     const [ticketPayload, setTicketPayload] = useState<T>({
         startAddress: {  },
@@ -66,17 +93,72 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         // reason: 'sports'
     } as T);
 
+    const [errorResponse, setErrorResponse] = useState<string>();
+
     const [dateTimes, setDateTimes] = useState({
         validFromDate: moment(),
-        validToDate: moment(),
-        // begin next full hour
-        validFromTime: moment().add(1, "hour").minutes(0),
-        // ends next full hour + 2 hours
-        validToTime: moment().add(3, "hour").minutes(0),
+        validFromTime: moment().add(1, "hour").minutes(0), // begin next full hour
+
+        validToDate: moment().add(3, "hour").minutes(0),
+        validToTime: moment().add(3, "hour").minutes(0), // ends next full hour + 2 hours
     });
 
+    /**
+     * Checks Values of Form model and sets error state
+     */
+    const checkErrorStates = () => {
+
+        const nextErrorState: ErrorInputFieldStates = {
+            reason: false,
+            startAddressStreet: false,
+            startAddressZipCode: false,
+            startAddressCity: false,
+            endAddressStreet: false,
+            endAddressZipCode: false,
+            endAddressCity: false
+        };
+
+        if (!ticketPayload.reason) {
+            nextErrorState.reason = true;
+        }
+        if (!ticketPayload.startAddress.street) {
+            nextErrorState.startAddressStreet = true;
+        }
+        if (!ticketPayload.startAddress.zipCode) {
+            nextErrorState.startAddressZipCode = true;
+        }
+        if (!ticketPayload.startAddress.city) {
+            nextErrorState.startAddressCity = true;
+        }
+        if (!ticketPayload.endAddress.street) {
+            nextErrorState.endAddressStreet = true;
+        }
+        if (!ticketPayload.endAddress.zipCode) {
+            nextErrorState.endAddressZipCode = true;
+        }
+        if (!ticketPayload.endAddress.city) {
+            nextErrorState.endAddressCity = true;
+        }
+
+        // set new error state
+        setErrorState(nextErrorState);
+
+        // return if something is in error state
+        return Object.values(nextErrorState).find(e => e === true) || false;
+    }
+
+    // form submit, send request to api
     const handleClick = async () => {
 
+        const hasErrorState: boolean = checkErrorStates();
+        if (hasErrorState) {
+            setErrorResponse("Ungültige Eingaben. Bitte die Formularfelder überprüfen.");
+            return;
+        }
+
+        console.log('hasErrorState: ' + hasErrorState, errorState);
+
+        // passport from identity provider
         ticketPayload.passportId = IdentityProvider.getIdentity().identificationDocumentId
 
         // create new date object from moment
@@ -95,23 +177,42 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
 
         console.log('create ticket request attempt', ticketPayload);
 
-        const response = await TicketFacade.createTicket(ticketPayload);
-        console.log('ticket response',response);
+        try {
+            const response = await TicketFacade.createTicket(ticketPayload)
+            console.log('ticket response success', response);
 
-        if (response.status === 200 || response.status === 201) {
             const ticketResponseDto = response.data;
             // save created ticket to LS
             TicketStorage.addTicket(ticketResponseDto);
             // go to details to show it
             history.push('/ticket/' + ticketResponseDto.ticketId);
-        } else {
-            // TODO: show error TOAST
+
+        } catch (error) {
+            // this is the main part. Use the response property from the error object
+            console.log('ticket response error status=' + error.response.status, error.response);
+
+            const errorResponse: ErrorResponseDto = error.response.data as ErrorResponseDto;
+            switch (errorResponse.statusCode) {
+                case 400: {
+                    setErrorResponse("Ungültige Eingaben. Bitte die Formularfelder überprüfen.");
+                    break;
+                }
+                case 409: {
+                    setErrorResponse("Im gewählten Zeitraum existiert bereits ein Ticket für die Person.");
+                    break;
+                }
+                default: {
+                    setErrorResponse("Vorgang konnte nicht verarbeitet werden. Formularfelder überprüfen oder später erneut probieren.");
+                    break;
+                }
+            }
         }
 
     }
 
     const onReasonChange = ({target}: React.ChangeEvent<{ value: unknown }>): void => {
         setTicketPayload({...ticketPayload, reason: target.value} as T);
+        setErrorState({...errorState, reason: false});
     }
 
     const onEmployerCodeChange = ({target}: React.ChangeEvent<{ value: unknown }>): void => {
@@ -122,6 +223,10 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
         const address = ticketPayload[which];
         address[propertyName] = target.value;
         setTicketPayload({...ticketPayload, [which]: address} as T)
+
+        const pascalCaseHelper = (w: string) => { return w[0].toUpperCase() + w.slice(1); };
+        const errorPropertyName = which + pascalCaseHelper(propertyName);
+        setErrorState({...errorState, [errorPropertyName]: false});
     }
 
     const onDateChange = (what: "start" | "end") =>
@@ -171,7 +276,12 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
                         </Typography>
                         <FormControl fullWidth={true}>
                             <InputLabel htmlFor='requestReason'>Grund</InputLabel>
-                            <Select id="requestReason" value={ticketPayload?.reason} onChange={onReasonChange}>
+                            <Select id="requestReason"
+                                value={ticketPayload?.reason}
+                                onChange={onReasonChange}
+                                error={errorState.reason}
+                                required
+                            >
                                 {/* TODO: implement work code stuff. In backend too */}
                                 {/* <MenuItem value={'work'}>Arbeiten</MenuItem> */}
                                 <MenuItem value={'food'}>Lebensmittel Einkauf</MenuItem>
@@ -204,27 +314,24 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
                         </Typography>
 
                         <Grid container justify="space-between">
-                            <FormControl component={Grid} item xs={12} sm={5}>
+                            <FormControl component={Grid} item xs={12} sm={12}>
                                 <InputLabel htmlFor="requestStartAddressStreet">Straße</InputLabel>
-                                <Input id="startAddressStreet" name="requestStartAddressStreet" onChange={onAddressChange('startAddress', 'street')} value={ticketPayload?.startAddress?.street}
+                                <Input id="startAddressStreet" name="requestStartAddressStreet" onChange={onAddressChange('startAddress', 'street')}
+                                    value={ticketPayload?.startAddress?.street} error={errorState.startAddressStreet}
                                     aria-describedby="requestStartAddressStreetHelper"/>
                                 <FormHelperText>z.B. Marienplatz</FormHelperText>
                             </FormControl>
                             <FormControl component={Grid} item xs={12} sm={5}>
-                                <InputLabel htmlFor="requestStartAddressHouseNum">Hausnummer</InputLabel>
-                                <Input id="startAddressHouseNum" name="requestStartAddressHouseNum" onChange={onAddressChange('startAddress', 'houseNumber')} value={ticketPayload?.startAddress?.houseNumber}
-                                    aria-describedby="requestStartAddressHouseNumHelper"/>
-                                    <FormHelperText>z.B. 21a</FormHelperText>
-                            </FormControl>
-                            <FormControl component={Grid} item xs={12} sm={5}>
                                 <InputLabel htmlFor="requestStartAddressZipCode">Postleitzahl</InputLabel>
-                                <Input id="startAddressZipCode" name="requestStartAddressZipCode" onChange={onAddressChange('startAddress', 'zipCode')} value={ticketPayload?.startAddress?.zipCode}
+                                <Input id="startAddressZipCode" name="requestStartAddressZipCode" onChange={onAddressChange('startAddress', 'zipCode')}
+                                    value={ticketPayload?.startAddress?.zipCode}  error={errorState.startAddressZipCode}
                                     aria-describedby="requestStartAddressZipCodeHelper"/>
                                 <FormHelperText>z.B. 70180</FormHelperText>
                             </FormControl>
                             <FormControl component={Grid} item xs={12} sm={5}>
                                 <InputLabel htmlFor="requestStartAddressCity">Stadt</InputLabel>
-                                <Input id="startAddressCity" name="requestStartAddressCity" onChange={onAddressChange('startAddress', 'city')} value={ticketPayload?.startAddress?.city}
+                                <Input id="startAddressCity" name="requestStartAddressCity" onChange={onAddressChange('startAddress', 'city')}
+                                    value={ticketPayload?.startAddress?.city}  error={errorState.startAddressCity}
                                     aria-describedby="requestStartAddressCityHelper"/>
                                     <FormHelperText>z.B. Stuttgart</FormHelperText>
                             </FormControl>
@@ -239,27 +346,24 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
                         </Typography>
 
                         <Grid container justify="space-between">
-                            <FormControl component={Grid} item xs={12} sm={5}>
+                            <FormControl component={Grid} item xs={12} sm={12}>
                                 <InputLabel htmlFor="requestEndAddressStreet">Straße</InputLabel>
-                                <Input id="endAddressStreet" name="requestEndAddressStreet" onChange={onAddressChange('endAddress', 'street')} value={ticketPayload?.endAddress?.street}
+                                <Input id="endAddressStreet" name="requestEndAddressStreet" onChange={onAddressChange('endAddress', 'street')}
+                                    value={ticketPayload?.endAddress?.street} error={errorState.endAddressStreet}
                                     aria-describedby="requestEndAddressStreetHelper"/>
                                 <FormHelperText>z.B. Königstraße</FormHelperText>
                             </FormControl>
                             <FormControl component={Grid} item xs={12} sm={5}>
-                                <InputLabel htmlFor="requestEndAddressHouseNum">Hausnummer</InputLabel>
-                                <Input id="endAddressHouseNum" name="requestEndAddressHouseNum" onChange={onAddressChange('endAddress', 'houseNumber')} value={ticketPayload?.endAddress?.houseNumber}
-                                    aria-describedby="requestEndAddressHouseNumHelper"/>
-                                    <FormHelperText>z.B. 21a</FormHelperText>
-                            </FormControl>
-                            <FormControl component={Grid} item xs={12} sm={5}>
                                 <InputLabel htmlFor="requestEndAddressZipCode">Postleitzahl</InputLabel>
-                                <Input id="endAddressZipCode" name="requestEndAddressZipCode" onChange={onAddressChange('endAddress', 'zipCode')} value={ticketPayload?.endAddress?.zipCode}
+                                <Input id="endAddressZipCode" name="requestEndAddressZipCode" onChange={onAddressChange('endAddress', 'zipCode')}
+                                    value={ticketPayload?.endAddress?.zipCode} error={errorState.endAddressZipCode}
                                     aria-describedby="requestEndAddressZipCodeHelper"/>
                                 <FormHelperText>z.B. 70180</FormHelperText>
                             </FormControl>
                             <FormControl component={Grid} item xs={12} sm={5}>
                                 <InputLabel htmlFor="requestEndAddressCity">Stadt</InputLabel>
-                                <Input id="endAddressCity" name="requestEndAddressCity" onChange={onAddressChange('endAddress', 'city')} value={ticketPayload?.endAddress?.city}
+                                <Input id="endAddressCity" name="requestEndAddressCity" onChange={onAddressChange('endAddress', 'city')}
+                                    value={ticketPayload?.endAddress?.city} error={errorState.endAddressCity}
                                     aria-describedby="requestEndAddressCityHelper"/>
                                     <FormHelperText>z.B. Stuttgart</FormHelperText>
                             </FormControl>
@@ -337,6 +441,10 @@ const LeaveRequestView = <T extends TicketRequestDto>(props: LeaveRequestViewPro
 
                     </CardContent>
                 </Card>
+
+            {errorResponse != null && <Alert variant="outlined" severity="error">
+                {errorResponse}
+            </Alert>}
 
             <FormControl margin="normal" fullWidth={true}>
                 <Button variant="contained" onClick={handleClick}>Ticket erstellen</Button>

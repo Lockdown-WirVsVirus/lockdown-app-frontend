@@ -37,6 +37,8 @@ const TicketDetailsView = () => {
 
   let { id } = useParams();
 
+  const DATE_FORMAT = 'DD.MM.YYYY';
+
   // get ticket
   const ticket = TicketStorage.getTicketById(id);
 
@@ -57,6 +59,43 @@ const TicketDetailsView = () => {
       </div>
     );
   }
+
+  const renderDate = (from: any, to: any) => {
+    if (!from || !to) {
+      return '';
+    }
+
+    const fromDate = moment(from);
+    const toDate = moment(to);
+
+    if (fromDate.format(DATE_FORMAT) === toDate.format(DATE_FORMAT)) {
+      return fromDate.format(DATE_FORMAT);
+    } else {
+      return fromDate.format(DATE_FORMAT) + ' - ' + toDate.format(DATE_FORMAT);
+    }
+  }
+
+  const generateQrPayload = (ticket: TicketResponseDto): string[] => {
+    const convertAddress = (address: Address): string[] => {
+      return [address.street, address.zipCode, address.city, address.country];
+    }
+    const payload = [
+      ticket.ticketId,
+      ticket.hashedPassportId,
+      ticket.reason,
+      ticket.validFromDateTime.toString(),
+      ticket.validToDateTime.toString(),
+      ...convertAddress(ticket.startAddress),
+      ...convertAddress(ticket.endAddress),
+      ticket.signature,
+    ];
+
+    console.log("ticket qr code payload: ", payload);
+
+    return payload;
+  }
+
+  console.log('rendering ticket details of ticket id: ' + ticketPayload.ticketId, ticketPayload);
 
   return (
     <div>
@@ -81,7 +120,7 @@ const TicketDetailsView = () => {
             { ticketPayload?.ticketId &&
               <Grid container direction="column" alignItems="center" justify="center" className={classes.barcode}>
                 <Grid item xs={12} >
-                    <QRCode value={ticketPayload.ticketId} level="M" />
+                    <QRCode value={ JSON.stringify(generateQrPayload(ticketPayload)) } level="L" size={256} />
                 </Grid>
               </Grid>
             }
@@ -94,7 +133,7 @@ const TicketDetailsView = () => {
               </Grid>
               <Grid item xs={6}>
                 <Typography className={classes.paper} variant="h5">
-                  { ticketPayload?.validFromDateTime ? moment(ticketPayload.validFromDateTime).format('DD.MM.YYYY') : '' }
+                  { renderDate(ticketPayload?.validFromDateTime, ticketPayload?.validToDateTime) }
                 </Typography>
               </Grid>
               <Grid item xs={6}>

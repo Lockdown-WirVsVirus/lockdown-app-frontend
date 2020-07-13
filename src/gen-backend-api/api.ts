@@ -153,6 +153,15 @@ export interface TicketResponseDto {
      * @memberof TicketResponseDto
      */
     ticketStatus: object;
+
+    /**
+     *
+     * @type {string}
+     * @memberof TicketResponseDto
+     */
+    signature: string;
+
+
 }
 
 /**
