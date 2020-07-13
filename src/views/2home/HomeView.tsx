@@ -71,7 +71,7 @@ const TicketDetailsView = () => {
   const history = useHistory();
 
   const goToCreate = () => {
-    history.push("create")
+    history.push("privacy")
   }
 
   const [tabValue, setTabValue] = React.useState(0);
